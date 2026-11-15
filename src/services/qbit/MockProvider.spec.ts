@@ -144,7 +144,17 @@ describe('MockProvider organisation', () => {
     });
     data = await mock.getMaindata(data.rid);
     applyMaindata(client, data);
-    expect(client.categories.get('iso')).toEqual({ name: 'iso', savePath: '/dl/iso' });
+    expect(client.categories.get('iso')).toEqual({
+      name: 'iso',
+      savePath: '/dl/iso',
+      shareLimits: {
+        ratioLimit: -2,
+        seedingTimeLimit: -2,
+        inactiveSeedingTimeLimit: -2,
+        action: 'Default',
+        mode: 'Default',
+      },
+    });
     expect(client.tags.has('fresh')).toBe(true);
     expect(client.torrents.get(a)).toMatchObject({
       category: 'iso',

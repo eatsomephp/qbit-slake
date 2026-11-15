@@ -75,17 +75,17 @@ describe('AddDialog', () => {
     openAdd({ text: `${HASH}\nnot a link` });
     await flushPromises();
 
-    expect(document.body.textContent).toContain('1 line not recognized');
-    expect($<HTMLInputElement>('input[placeholder]').placeholder).toBe('/downloads');
+    expect(document.body.textContent).toContain('1 torrent · 1 not recognized');
+    expect($<HTMLInputElement>('#add-save-path').placeholder).toBe('/downloads');
 
     const select = $<HTMLSelectElement>('select');
     select.value = 'linux';
     select.dispatchEvent(new Event('change'));
     await flushPromises();
-    expect($<HTMLInputElement>('input[placeholder]').placeholder).toBe('/dl/linux');
+    expect($<HTMLInputElement>('#add-save-path').placeholder).toBe('/dl/linux');
 
     button('keep').click();
-    const newTags = $<HTMLInputElement>('input[aria-label="New tags"]');
+    const newTags = $<HTMLInputElement>('#add-new-tags');
     newTags.value = 'fresh, , x';
     newTags.dispatchEvent(new Event('input'));
     await flushPromises(); // Input emits update:modelValue from a watcher

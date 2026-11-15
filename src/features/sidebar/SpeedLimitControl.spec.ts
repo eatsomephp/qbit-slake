@@ -7,8 +7,8 @@ import { useTorrentsStore } from '@/stores/torrents';
 
 const qbit = vi.hoisted(() => ({
   toggleAltSpeedLimits: vi.fn(),
-  getPreferences: vi.fn(),
-  setPreferences: vi.fn(),
+  getSpeedLimits: vi.fn(),
+  setSpeedLimits: vi.fn(),
 }));
 vi.mock('@/services/qbit', async (importOriginal) => ({
   ...(await importOriginal<object>()),
@@ -39,8 +39,8 @@ async function openPopover() {
   await flushPromises();
 }
 
-function seedLimitPreferences(limits: Record<string, number> = {}) {
-  qbit.getPreferences.mockResolvedValue({
+function seedSpeedLimits(limits: Record<string, number> = {}) {
+  qbit.getSpeedLimits.mockResolvedValue({
     dl_limit: 0,
     up_limit: 0,
     alt_dl_limit: 0,
@@ -67,6 +67,7 @@ function modeRadio(label: Mode) {
 async function enterLimit(mode: Mode, direction: Direction, kibPerSec: string) {
   const input = limitInput(mode, direction);
   input.value = kibPerSec;
+  input.dispatchEvent(new Event('input'));
   input.dispatchEvent(new Event('change'));
   await flushPromises();
 }
@@ -75,7 +76,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   setActivePinia(createPinia());
   useAppStore().version = '5.3.0';
-  seedLimitPreferences();
+  seedSpeedLimits();
 });
 
 afterEach(() => {
@@ -101,7 +102,7 @@ describe('SpeedLimitControl', () => {
   });
 
   it('shows both normal and alternative limits in KiB/s, empty when unlimited', async () => {
-    seedLimitPreferences({
+    seedSpeedLimits({
       dl_limit: 2048 * 1024,
       alt_dl_limit: 512 * 1024,
       alt_up_limit: 64 * 1024,
@@ -131,26 +132,37 @@ describe('SpeedLimitControl', () => {
   ] as const)('saves the %s %s field as %s', async (mode, direction, preferenceKey) => {
     await openPopover();
     await enterLimit(mode, direction, '256');
-    expect(qbit.setPreferences).toHaveBeenCalledWith({ [preferenceKey]: 256 * 1024 });
+    expect(qbit.setSpeedLimits).toHaveBeenCalledWith({
+      dl_limit: 0,
+      up_limit: 0,
+      alt_dl_limit: 0,
+      alt_up_limit: 0,
+      [preferenceKey]: 256 * 1024,
+    });
     expect(requestSync).toHaveBeenCalled();
   });
 
   it('saves an emptied field as unlimited', async () => {
-    seedLimitPreferences({ up_limit: 100 * 1024 });
+    seedSpeedLimits({ up_limit: 100 * 1024 });
     await openPopover();
     await enterLimit('Normal', 'upload', '');
-    expect(qbit.setPreferences).toHaveBeenCalledWith({ up_limit: 0 });
+    expect(qbit.setSpeedLimits).toHaveBeenCalledWith({
+      dl_limit: 0,
+      up_limit: 0,
+      alt_dl_limit: 0,
+      alt_up_limit: 0,
+    });
   });
 
   it('skips the request when the limit is unchanged', async () => {
-    seedLimitPreferences({ alt_dl_limit: 512 * 1024 });
+    seedSpeedLimits({ alt_dl_limit: 512 * 1024 });
     await openPopover();
     await enterLimit('Alternative', 'download', '512');
-    expect(qbit.setPreferences).not.toHaveBeenCalled();
+    expect(qbit.setSpeedLimits).not.toHaveBeenCalled();
   });
 
   it('disables the fields until the limits have loaded', async () => {
-    qbit.getPreferences.mockReturnValue(new Promise(() => {}));
+    qbit.getSpeedLimits.mockReturnValue(new Promise(() => {}));
     await openPopover();
     expect(limitInput('Normal', 'download').disabled).toBe(true);
   });
