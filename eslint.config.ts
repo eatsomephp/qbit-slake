@@ -16,5 +16,9 @@ export default defineConfigWithVueTs(
       'no-restricted-imports': ['error', { paths: ['axios'] }],
     },
   },
+  {
+    files: ['**/*.spec.ts'],
+    rules: { 'vue/one-component-per-file': 'off' },
+  },
   skipFormatting,
 );
