@@ -1,4 +1,4 @@
-/* https://github.com/morhetz/gruvbox — light (medium) in light mode, dark (medium) in dark mode. */
+/* https://github.com/morhetz/gruvbox — light in light mode, dark in dark mode, each in medium, hard, or soft contrast. */
 :root[data-theme='gruvbox'] {
   --background: #fbf1c7;
   --foreground: #3c3836;
@@ -39,6 +39,98 @@
   --input: #504945;
   --sidebar: #1d2021;
   --sidebar-accent: #3c3836;
+  --chart-download: #83a598;
+  --chart-upload: #fe8019;
+  --success: #b8bb26;
+  --warning: #fabd2f;
+}
+
+:root[data-theme='gruvbox-hard'] {
+  --background: #f9f5d7;
+  --foreground: #3c3836;
+  --card: #f9f5d7;
+  --popover: #f9f5d7;
+  --primary: #076678;
+  --primary-foreground: #f9f5d7;
+  --secondary: #f2e5bc;
+  --muted: #f2e5bc;
+  --muted-foreground: #7c6f64;
+  --accent: #ebdbb2;
+  --destructive: #9d0006;
+  --destructive-foreground: #f9f5d7;
+  --border: #ebdbb2;
+  --input: #d5c4a1;
+  --sidebar: #f2e5bc;
+  --sidebar-accent: #d5c4a1;
+  --chart-download: #076678;
+  --chart-upload: #af3a03;
+  --success: #79740e;
+  --warning: #b57614;
+}
+
+:root.dark[data-theme='gruvbox-hard'] {
+  --background: #1d2021;
+  --foreground: #ebdbb2;
+  --card: #282828;
+  --popover: #282828;
+  --primary: #83a598;
+  --primary-foreground: #1d2021;
+  --secondary: #3c3836;
+  --muted: #3c3836;
+  --muted-foreground: #a89984;
+  --accent: #3c3836;
+  --destructive: #fb4934;
+  --destructive-foreground: #1d2021;
+  --border: #3c3836;
+  --input: #504945;
+  --sidebar: #141617;
+  --sidebar-accent: #3c3836;
+  --chart-download: #83a598;
+  --chart-upload: #fe8019;
+  --success: #b8bb26;
+  --warning: #fabd2f;
+}
+
+:root[data-theme='gruvbox-soft'] {
+  --background: #f2e5bc;
+  --foreground: #3c3836;
+  --card: #f2e5bc;
+  --popover: #f2e5bc;
+  --primary: #076678;
+  --primary-foreground: #f2e5bc;
+  --secondary: #ebdbb2;
+  --muted: #ebdbb2;
+  --muted-foreground: #7c6f64;
+  --accent: #d5c4a1;
+  --destructive: #9d0006;
+  --destructive-foreground: #f2e5bc;
+  --border: #d5c4a1;
+  --input: #bdae93;
+  --sidebar: #ebdbb2;
+  --sidebar-accent: #bdae93;
+  --chart-download: #076678;
+  --chart-upload: #af3a03;
+  --success: #79740e;
+  --warning: #b57614;
+}
+
+:root.dark[data-theme='gruvbox-soft'] {
+  --background: #32302f;
+  --foreground: #ebdbb2;
+  --card: #3c3836;
+  --popover: #3c3836;
+  --primary: #83a598;
+  --primary-foreground: #32302f;
+  --secondary: #504945;
+  --muted: #504945;
+  --muted-foreground: #a89984;
+  --accent: #504945;
+  --destructive: #fb4934;
+  --destructive-foreground: #32302f;
+  --border: #504945;
+  --input: #665c54;
+  --sidebar: #282828;
+  --sidebar-accent: #504945;
   --chart-download: #83a598;
   --chart-upload: #fe8019;
   --success: #b8bb26;

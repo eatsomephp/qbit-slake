@@ -33,11 +33,17 @@ const themeStylesheets = import.meta.glob<string>('./*.css', {
 
 function declaredTokens(css: string, selector: string): string[] {
   const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
-  const rule = [...withoutComments.matchAll(/([^{};]+)\{([^}]*)\}/g)].find(
-    ([, ruleSelector]) => ruleSelector!.trim() === selector,
+  const rule = [...withoutComments.matchAll(/([^{};]+)\{([^}]*)\}/g)].find(([, selectorList]) =>
+    selectorList!.split(',').some((ruleSelector) => ruleSelector.trim() === selector),
   );
   if (!rule) return [];
   return [...rule[2]!.matchAll(/--([\w-]+)\s*:/g)].map(([, name]) => name!);
+}
+
+function stylesheetDeclaring(themeId: string): [path: string, css: string] | undefined {
+  return Object.entries(themeStylesheets).find(([, css]) =>
+    css.includes(`[data-theme='${themeId}']`),
+  );
 }
 
 describe('resolveTheme', () => {
@@ -71,10 +77,11 @@ describe('Default, the base theme', () => {
 });
 
 describe.each(BUILT_IN_THEMES.filter((theme) => theme.id !== 'default'))('$label', ({ id }) => {
-  const css = themeStylesheets[`./${id}.css`] ?? '';
+  const [path, css] = stylesheetDeclaring(id) ?? ['', ''];
 
   it('is imported by the app stylesheet', () => {
-    expect(styleCss).toContain(`@import './themes/${id}.css';`);
+    expect(path).not.toBe('');
+    expect(styleCss).toContain(`@import '${path.replace('./', './themes/')}';`);
   });
 
   it.each([
@@ -85,7 +92,10 @@ describe.each(BUILT_IN_THEMES.filter((theme) => theme.id !== 'default'))('$label
   });
 });
 
-it('registers every theme stylesheet', () => {
-  const registered = BUILT_IN_THEMES.map((theme) => `./${theme.id}.css`);
-  expect(registered).toEqual(expect.arrayContaining(Object.keys(themeStylesheets)));
+it('registers every theme a stylesheet declares', () => {
+  const declared = Object.values(themeStylesheets).flatMap((css) =>
+    [...css.matchAll(/\[data-theme='([\w-]+)'\]/g)].map(([, id]) => id!),
+  );
+  const registered = BUILT_IN_THEMES.map((theme) => theme.id);
+  expect(registered).toEqual(expect.arrayContaining(declared));
 });
