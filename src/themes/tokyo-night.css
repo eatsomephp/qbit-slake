@@ -1,0 +1,46 @@
+/* https://github.com/folke/tokyonight.nvim — Day in light mode, Night in dark mode. */
+:root[data-theme='tokyo-night'] {
+  --background: #e1e2e7;
+  --foreground: #3760bf;
+  --card: #e1e2e7;
+  --popover: #d0d5e3;
+  --primary: #2e7de9;
+  --primary-foreground: #ffffff;
+  --secondary: #d0d5e3;
+  --muted: #d0d5e3;
+  --muted-foreground: #6172b0;
+  --accent: #c4c8da;
+  --destructive: #c64343;
+  --destructive-foreground: #ffffff;
+  --border: #c4c8da;
+  --input: #b4b5b9;
+  --sidebar: #d0d5e3;
+  --sidebar-accent: #c4c8da;
+  --chart-download: #007197;
+  --chart-upload: #b15c00;
+  --success: #587539;
+  --warning: #8c6c3e;
+}
+
+:root.dark[data-theme='tokyo-night'] {
+  --background: #1a1b26;
+  --foreground: #c0caf5;
+  --card: #16161e;
+  --popover: #16161e;
+  --primary: #7aa2f7;
+  --primary-foreground: #1a1b26;
+  --secondary: #292e42;
+  --muted: #292e42;
+  --muted-foreground: #a9b1d6;
+  --accent: #292e42;
+  --destructive: #f7768e;
+  --destructive-foreground: #1a1b26;
+  --border: #292e42;
+  --input: #3b4261;
+  --sidebar: #16161e;
+  --sidebar-accent: #292e42;
+  --chart-download: #7dcfff;
+  --chart-upload: #ff9e64;
+  --success: #9ece6a;
+  --warning: #e0af68;
+}

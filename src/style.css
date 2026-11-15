@@ -1,0 +1,351 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './themes/rose-pine.css';
+@import './themes/catppuccin.css';
+@import './themes/gruvbox.css';
+@import './themes/kanagawa.css';
+@import './themes/tokyo-night.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* The Default theme, and the base every other theme overrides. */
+:root {
+  --radius: 0.375rem;
+  --background: oklch(0.99 0.002 260);
+  --foreground: oklch(0.2 0.005 260);
+  --card: oklch(1 0 0);
+  --popover: oklch(1 0 0);
+  --primary: oklch(0.52 0.17 266);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.003 260);
+  --muted: oklch(0.965 0.003 260);
+  --muted-foreground: oklch(0.52 0.01 260);
+  --accent: oklch(0.95 0.005 260);
+  --destructive: oklch(0.58 0.21 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.91 0.004 260);
+  --input: oklch(0.91 0.004 260);
+  --sidebar: oklch(0.962 0.004 260);
+  --sidebar-accent: oklch(0.92 0.006 260);
+  /* Colorblind-validated against --sidebar in both modes; re-validate before changing. */
+  --chart-download: #2a78d6;
+  --chart-upload: #eb6834;
+  --success: oklch(0.6 0.15 155);
+  --warning: oklch(0.68 0.16 70);
+  /*
+   * Aliases and derived colors: themes only set the palette above. Never set these in
+   * .dark, or Default's dark values leak into every theme that doesn't override them.
+   */
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+  --secondary-foreground: var(--foreground);
+  --accent-foreground: var(--foreground);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --ring: var(--primary);
+  --highlight: color-mix(in oklab, var(--primary) 15%, transparent);
+  --highlight-strong: color-mix(in oklab, var(--primary) 24%, transparent);
+  --selected: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--primary) 15%, transparent),
+    color-mix(in oklab, var(--primary) 6%, transparent)
+  );
+  --selected-strong: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--primary) 23%, transparent),
+    color-mix(in oklab, var(--primary) 11%, transparent)
+  );
+  --row-hover: color-mix(in oklab, var(--accent) 60%, transparent);
+  --table-header: color-mix(in oklab, var(--muted) 70%, var(--background));
+  --divider: color-mix(in oklab, var(--border) 50%, transparent);
+  --overlay: color-mix(in oklab, black 40%, transparent);
+}
+
+.dark {
+  --background: oklch(0.148 0.006 260);
+  --foreground: oklch(0.94 0.004 260);
+  --card: oklch(0.196 0.006 260);
+  --popover: oklch(0.212 0.007 260);
+  --primary: oklch(0.74 0.13 266);
+  --primary-foreground: oklch(0.17 0.01 260);
+  --secondary: oklch(0.242 0.008 260);
+  --muted: oklch(0.23 0.007 260);
+  --muted-foreground: oklch(0.72 0.012 260);
+  --accent: oklch(0.265 0.009 260);
+  --destructive: oklch(0.68 0.18 25);
+  --destructive-foreground: oklch(0.17 0.01 260);
+  --border: oklch(0.29 0.008 260);
+  --input: oklch(0.33 0.009 260);
+  --sidebar: oklch(0.178 0.006 260);
+  --sidebar-accent: oklch(0.245 0.008 260);
+  --chart-download: #3987e5;
+  --chart-upload: #ef7442;
+  --success: oklch(0.74 0.15 155);
+  --warning: oklch(0.8 0.14 75);
+}
+
+@theme inline {
+  --font-sans:
+    'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --radius-sm: calc(var(--radius) - 1px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-chart-download: var(--chart-download);
+  --color-chart-upload: var(--chart-upload);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-highlight: var(--highlight);
+  --color-highlight-strong: var(--highlight-strong);
+  --color-row-hover: var(--row-hover);
+  --color-table-header: var(--table-header);
+  --color-divider: var(--divider);
+  --color-overlay: var(--overlay);
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-compact: 0.8125rem;
+  --text-compact--line-height: 1.25rem;
+}
+
+/* The spacing system (see .ai/CONTEXT.md). Surfaces and forms use these, never raw steps. */
+@theme {
+  --spacing-field: 0.375rem;
+  --spacing-row: 0.625rem;
+  --spacing-gutter: 0.75rem;
+  --spacing-form: 1rem;
+  --spacing-dialog: 1.25rem;
+  --spacing-section: 1.5rem;
+}
+
+/* --table-header is resolved at :root, so a surface that isn't --background must re-derive it. */
+@utility panel-surface {
+  background-color: var(--sidebar);
+  --table-header: color-mix(in oklab, var(--sidebar-accent) 45%, var(--sidebar));
+}
+
+@utility bg-selected {
+  background-image: var(--selected);
+}
+
+@utility bg-selected-strong {
+  background-image: var(--selected-strong);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+  body {
+    @apply bg-background text-foreground font-sans text-sm antialiased;
+    /* Renders IBM Plex Sans and JetBrains Mono at Inter's x-height; text sizes and row heights are tuned against it. */
+    font-size-adjust: ex-height 0.546;
+  }
+}
+
+@layer components {
+  .is-resizing-column,
+  .is-resizing-column * {
+    cursor: col-resize !important;
+    user-select: none !important;
+  }
+  .fade-overflow-end {
+    mask-image: linear-gradient(to right, black calc(100% - 1.25rem), transparent);
+  }
+  .tags-marquee {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--marquee-fade-start),
+      black calc(100% - var(--marquee-fade-end)),
+      transparent
+    );
+    /* scroll timeline is inactive when nothing overflows, so the end fade only shows on clipped rows */
+    animation: tags-overflow-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+  @supports not (animation-timeline: scroll()) {
+    .tags-marquee {
+      --marquee-fade-end: 0.75rem;
+    }
+  }
+  .tags-marquee[data-marquee] {
+    animation: tags-marquee-fade var(--marquee-duration) ease-in-out
+      calc(var(--marquee-duration) * -0.1) infinite alternate both;
+  }
+  .tags-marquee[data-marquee] > .tags-marquee-track {
+    animation: tags-marquee var(--marquee-duration) ease-in-out calc(var(--marquee-duration) * -0.1)
+      infinite alternate;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tags-marquee[data-marquee] {
+      animation: none;
+      --marquee-fade-end: 0.75rem;
+    }
+    .tags-marquee[data-marquee] > .tags-marquee-track {
+      animation: none;
+    }
+  }
+  .status-icon-spin {
+    animation: status-icon-spin 1.2s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .status-icon-spin {
+      animation: none;
+    }
+  }
+  .label-chip {
+    --label-tint: oklch(0.65 0.14 var(--label-hue, 250));
+    background-color: color-mix(in oklab, var(--label-tint) 16%, var(--background));
+    color: color-mix(in oklab, var(--label-tint) 65%, var(--foreground));
+  }
+  .progress-fill {
+    background-image: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--progress-from) 85%, transparent),
+      var(--progress-to)
+    );
+    box-shadow: 0 0 6px -1px color-mix(in oklab, var(--progress-to) 60%, transparent);
+    transition: width 0.6s ease-out;
+  }
+  .progress-down {
+    --progress-from: color-mix(in oklch, var(--chart-download) 45%, var(--primary));
+    --progress-to: color-mix(in oklab, var(--chart-download) 85%, var(--foreground));
+  }
+  .progress-up {
+    --progress-from: color-mix(in oklch, var(--chart-upload) 45%, var(--warning));
+    --progress-to: color-mix(in oklab, var(--chart-upload) 85%, var(--foreground));
+  }
+  .progress-done {
+    --progress-from: color-mix(in oklch, var(--success) 55%, var(--chart-download));
+    --progress-to: var(--success);
+  }
+  .progress-error {
+    --progress-from: color-mix(in oklch, var(--destructive) 55%, var(--chart-upload));
+    --progress-to: var(--destructive);
+  }
+  .progress-idle {
+    --progress-from: color-mix(in oklab, var(--muted-foreground) 25%, transparent);
+    --progress-to: color-mix(in oklab, var(--muted-foreground) 60%, transparent);
+    box-shadow: none;
+  }
+  .progress-muted {
+    --progress-from: color-mix(in oklab, var(--muted-foreground) 15%, transparent);
+    --progress-to: color-mix(in oklab, var(--muted-foreground) 35%, transparent);
+    box-shadow: none;
+  }
+  .progress-checking {
+    --progress-from: color-mix(in oklch, var(--warning) 55%, var(--chart-upload));
+    --progress-to: var(--warning);
+    --progress-stripe: color-mix(in oklab, var(--background) 35%, transparent);
+    background-image:
+      linear-gradient(
+        -45deg,
+        var(--progress-stripe) 25%,
+        transparent 25% 50%,
+        var(--progress-stripe) 50% 75%,
+        transparent 75%
+      ),
+      linear-gradient(to right, var(--progress-from), var(--progress-to));
+    background-size:
+      0.75rem 0.75rem,
+      100% 100%;
+    animation: progress-stripes 0.8s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .progress-fill {
+      transition: none;
+    }
+    .progress-checking {
+      animation: none;
+    }
+  }
+}
+
+@keyframes progress-stripes {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0.75rem 0,
+      0 0;
+  }
+}
+
+@property --marquee-fade-start {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --marquee-fade-end {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes tags-overflow-fade {
+  from,
+  to {
+    --marquee-fade-end: 0.75rem;
+  }
+}
+
+@keyframes tags-marquee-fade {
+  0%,
+  15% {
+    --marquee-fade-start: 0px;
+    --marquee-fade-end: 0.75rem;
+  }
+  85%,
+  100% {
+    --marquee-fade-end: 0px;
+    --marquee-fade-start: 0.75rem;
+  }
+}
+
+@keyframes tags-marquee {
+  0%,
+  15% {
+    transform: translateX(0);
+  }
+  85%,
+  100% {
+    transform: translateX(var(--marquee-distance));
+  }
+}
+
+@keyframes status-icon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

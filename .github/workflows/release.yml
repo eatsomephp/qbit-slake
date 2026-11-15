@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      # Releases made with the default token don't trigger other workflows, so assets and the
+      # docker mod are built below rather than on a `release` event. RELEASE_PLEASE_TOKEN (a PAT)
+      # is optional and only needed for CI to run on the release PR.
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  assets:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.release-please.outputs.tag_name }}
+      VERSION: ${{ needs.release-please.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+      - uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm package "$VERSION"
+      - name: Collect assets
+        run: |
+          cp qbit-slake/public/theme.example.css dist/
+          cd dist
+          cp "qbit-slake-$VERSION.zip" qbit-slake.zip
+          sha256sum "qbit-slake-$VERSION.zip" qbit-slake.zip theme.example.css > SHA256SUMS
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$TAG" --clobber \
+            "dist/qbit-slake-$VERSION.zip" dist/qbit-slake.zip dist/theme.example.css dist/SHA256SUMS
+
+  docker-mod:
+    needs: [release-please, assets]
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker-mod.yml
+    with:
+      version: ${{ needs.release-please.outputs.version }}

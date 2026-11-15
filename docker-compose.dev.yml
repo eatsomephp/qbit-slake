@@ -1,0 +1,14 @@
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - WEBUI_PORT=8080
+    volumes:
+      - ./dev/config:/config
+      - ./dev/downloads:/downloads
+      - ./qbit-slake:/webui:ro # point Alternative WebUI at /webui to test real builds
+    ports:
+      - '8080:8080'
