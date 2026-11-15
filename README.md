@@ -8,7 +8,7 @@ A fast, keyboard-driven, alternative WebUI for qBittorrent 5+
 
 - Fast with thousands of torrents
 - Static assets, no separate process
-- Saved filter views, plus conditions like `ratio > 2` or `size >= 100 GiB`
+- Saved filter views, plus conditions like `ratio>2` or `size>=100GiB`
 - Vim-style keymaps with which-key and a cheat sheet (`?`)
 - Mobile layout, installable as a PWA
 - Themes: [Rosé Pine](https://rosepinetheme.com) (main, Moon), [Catppuccin](https://catppuccin.com) (Mocha, Macchiato, Frappé), [Gruvbox](https://github.com/morhetz/gruvbox) (medium, hard, soft), [Kanagawa](https://github.com/rebelot/kanagawa.nvim) (Wave, Dragon), [Tokyo Night](https://github.com/folke/tokyonight.nvim) (Night, Storm, Moon), or your own `theme.css`, each with a light mode
