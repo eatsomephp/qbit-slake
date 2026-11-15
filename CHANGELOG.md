@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/eatsomephp/qbit-slake/compare/v1.1.0...v1.2.0) (2026-11-15)
+
+
+### Features
+
+* jump from the filter box to the results with Enter or Down ([b2b7d72](https://github.com/eatsomephp/qbit-slake/commit/b2b7d722d0b9ca473b5a943216b86ce5112edf6a))
+
 ## [1.1.0](https://github.com/eatsomephp/qbit-slake/compare/v1.0.0...v1.1.0) (2026-11-15)
 
 
