@@ -31,11 +31,12 @@ export interface PageShortcutOptions {
   stepTab?: (step: 1 | -1) => void;
   tabNoun?: string;
   focusSearch?: () => void;
+  isSearchShown?: () => boolean;
 }
 
 export function usePageShortcuts(options: PageShortcutOptions) {
   const router = useRouter();
-  const { stepTab, focusSearch, tabNoun = 'tab' } = options;
+  const { stepTab, focusSearch, isSearchShown, tabNoun = 'tab' } = options;
   const tabBindings: Binding[] = stepTab
     ? [
         { keys: 'gt', label: `Next ${tabNoun}`, section: 'page', run: () => stepTab(1) },
@@ -43,7 +44,15 @@ export function usePageShortcuts(options: PageShortcutOptions) {
       ]
     : [];
   const searchBindings: Binding[] = focusSearch
-    ? [{ keys: '/', label: 'Focus the search box', section: 'page', run: focusSearch }]
+    ? [
+        {
+          keys: '/',
+          label: 'Focus the search box',
+          section: 'page',
+          isAvailable: isSearchShown,
+          run: focusSearch,
+        },
+      ]
     : [];
   useKeymap({
     bindings: [

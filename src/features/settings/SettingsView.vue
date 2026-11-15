@@ -336,6 +336,7 @@ usePageShortcuts({
   stepTab: stepSection,
   tabNoun: 'section',
   focusSearch: () => document.getElementById(SETTINGS_SEARCH_ID)?.focus(),
+  isSearchShown: () => !isMobile.value || activeSectionId.value === null,
 });
 
 function keepOpenWhenClickingToast(event: CustomEvent<{ originalEvent: Event }>) {
