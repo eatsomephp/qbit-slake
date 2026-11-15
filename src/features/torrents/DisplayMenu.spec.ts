@@ -11,6 +11,7 @@ let wrapper: VueWrapper | undefined;
 beforeEach(() => {
   localStorage.clear();
   setActivePinia(createPinia());
+  useUiStore().tableView = 'comfortable';
 });
 
 afterEach(() => {
@@ -108,10 +109,22 @@ describe('DisplayMenu', () => {
     expect(columnCheckbox(hiddenLabel).hasAttribute('disabled')).toBe(true);
   });
 
-  it('enables column controls in the other layouts', async () => {
+  it('defaults to the stacked layout with column controls disabled', async () => {
+    localStorage.clear();
+    setActivePinia(createPinia());
     await openMenu();
-    expect(document.body.textContent).not.toContain('fixed columns');
-    expect(resetButton().disabled).toBe(false);
-    expect(columnCheckbox(hiddenLabel).hasAttribute('disabled')).toBe(false);
+    expect(useUiStore().tableView).toBe('stacked');
+    expect(resetButton().disabled).toBe(true);
   });
+
+  it.each(['comfortable', 'compact'] as const)(
+    'enables column controls in the %s layout',
+    async (view) => {
+      useUiStore().tableView = view;
+      await openMenu();
+      expect(document.body.textContent).not.toContain('fixed columns');
+      expect(resetButton().disabled).toBe(false);
+      expect(columnCheckbox(hiddenLabel).hasAttribute('disabled')).toBe(false);
+    },
+  );
 });

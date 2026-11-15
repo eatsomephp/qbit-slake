@@ -164,7 +164,17 @@ describe('DetailsDrawer', () => {
     useUiStore().detailsTab = 'files';
     const w = mountDrawer();
     await flushPromises();
-    await w.get('[aria-label="Rename b.txt"]').trigger('click');
+    const row = w
+      .findAll('[role=row]')
+      .find((r) => r.find('[aria-label="Download b.txt"]').exists())!;
+    await row.trigger('contextmenu');
+    await flushPromises();
+    const renameItem = [...document.body.querySelectorAll<HTMLElement>('[role=menuitem]')].find(
+      (item) => item.textContent?.includes('Rename'),
+    )!;
+    renameItem.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+    renameItem.click();
+    await flushPromises();
     const input = w.get('input[aria-label="New name"]');
     await input.setValue('c.txt');
     await input.trigger('keydown', { key: 'Enter' });

@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { DEFAULT_RAW_TORRENT } from '@/sync/normalize';
@@ -7,6 +7,10 @@ import { emptyFilters } from '@/lib/torrentFilters';
 import { useTorrentsStore } from '@/stores/torrents';
 import { useUiStore } from '@/stores/ui';
 import SearchBox from './SearchBox.vue';
+
+beforeAll(() => {
+  Element.prototype.scrollTo = () => {};
+});
 
 beforeEach(() => {
   localStorage.clear();
@@ -326,15 +330,16 @@ describe('SearchBox: Backspace on an empty box', () => {
 });
 
 describe('SearchBox: clearing', () => {
-  it('the clear button empties the search but keeps filters', async () => {
+  it('the clear button empties the search and the filters', async () => {
     const box = mountBox();
     box.ui.filters = { ...emptyFilters(), tag: { include: ['keep'], exclude: [] } };
     box.ui.search = 'abc';
     await flushPromises();
-    await box.wrapper.get('[aria-label="Clear filter"]').trigger('click');
+    await box.wrapper.get('[aria-label="Clear search and filters"]').trigger('click');
     expect(box.ui.search).toBe('');
-    expect(box.ui.filters.tag.include).toEqual(['keep']);
-    expect(box.wrapper.find('[aria-label="Clear filter"]').exists()).toBe(false);
+    expect(box.ui.filters.tag.include).toEqual([]);
+    expect(box.input.element.value).toBe('');
+    expect(box.wrapper.find('[aria-label="Clear search and filters"]').exists()).toBe(false);
   });
 
   it('Escape without a list clears the search', async () => {

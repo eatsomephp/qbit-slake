@@ -4,6 +4,7 @@ import qbit, { QbtHttpError } from '@/services/qbit';
 import { emptyFilters, type TorrentFilters } from '@/lib/torrentFilters';
 import { useAppStore } from './app';
 import { SAVED_VIEWS_KEY, useSavedViewsStore } from './savedViews';
+import { LEGACY_STORAGE_PREFIX } from '@/lib/legacyStorage';
 import { useToastsStore } from './toasts';
 import { useUiStore } from './ui';
 
@@ -41,9 +42,23 @@ describe('savedViews store: client data backend', () => {
   it('loads views from the server on API 2.13.1 and later', async () => {
     const store = setup('2.13.1', { [SAVED_VIEWS_KEY]: [storedView('a', 'Movies')] });
     await store.load();
-    expect(loadClientData).toHaveBeenCalledWith([SAVED_VIEWS_KEY]);
+    expect(loadClientData).toHaveBeenCalledWith([
+      SAVED_VIEWS_KEY,
+      LEGACY_STORAGE_PREFIX + 'savedViews',
+    ]);
     expect(store.views.map((v) => v.name)).toEqual(['Movies']);
     expect(store.loadState).toBe('ready');
+  });
+
+  it('moves views stored under the legacy server key to the current key', async () => {
+    const legacyKey = LEGACY_STORAGE_PREFIX + 'savedViews';
+    const store = setup('2.13.1', { [legacyKey]: [storedView('a', 'Old')] });
+    await store.load();
+    expect(storeClientData).toHaveBeenCalledWith({
+      [SAVED_VIEWS_KEY]: [storedView('a', 'Old')],
+      [legacyKey]: null,
+    });
+    expect(store.views.map((v) => v.name)).toEqual(['Old']);
   });
 
   it('migrates local views to the server when the server has none', async () => {

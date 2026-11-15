@@ -41,6 +41,7 @@ enableAutoUnmount(afterEach);
 beforeEach(() => {
   localStorage.clear();
   setActivePinia(createPinia());
+  useUiStore().tableView = 'comfortable';
 });
 
 describe('TorrentTable', () => {
@@ -263,14 +264,13 @@ describe('TorrentTable', () => {
     expect(table.style.getPropertyValue('--col-size')).toBe('76px');
   });
 
-  it('stacked view replaces the column header with a sort bar and two-line rows', async () => {
+  it('stacked view drops the column header and renders two-line rows', async () => {
     seed(3);
     const ui = useUiStore();
     ui.tableView = 'stacked';
     const w = mount(TorrentTable);
     await flushPromises();
     expect(w.findAll('[role=columnheader]')).toHaveLength(0);
-    expect(w.find('select[aria-label="Sort by"]').exists()).toBe(true);
     expect(w.findAll('[role=row][aria-rowindex]')[0]!.text()).toContain('50.0% of');
   });
 

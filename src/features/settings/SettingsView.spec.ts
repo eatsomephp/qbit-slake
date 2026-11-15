@@ -270,6 +270,7 @@ describe('SettingsView', () => {
     const SECTION_TITLES = [
       'Behavior',
       'Downloads',
+      'Cookies',
       'Connection',
       'Speed',
       'BitTorrent',
