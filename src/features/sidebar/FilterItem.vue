@@ -105,7 +105,7 @@ function onRowClick(event: MouseEvent) {
           'relative z-10 hover:bg-sidebar-border hover:text-destructive',
           mark === 'exclude'
             ? 'text-destructive/70'
-            : 'opacity-0 group-focus-within/row:opacity-100 group-hover/row:opacity-100 pointer-coarse:hidden',
+            : 'opacity-0 group-has-focus-visible/row:opacity-100 group-hover/row:opacity-100 pointer-coarse:hidden',
         ]"
         :aria-label="`Exclude ${label}`"
         :aria-pressed="mark === 'exclude'"
