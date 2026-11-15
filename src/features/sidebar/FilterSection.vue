@@ -78,7 +78,7 @@ function closeFindIfEmpty() {
         >
           <span class="truncate">{{ title }}</span>
           <ChevronDown
-            class="size-3 shrink-0 opacity-0 transition group-focus-within/header:opacity-100 group-hover/header:opacity-100"
+            class="size-3 shrink-0 opacity-0 transition group-has-focus-visible/header:opacity-100 group-hover/header:opacity-100"
             :class="collapsed && '-rotate-90 opacity-100'"
           />
           <span
