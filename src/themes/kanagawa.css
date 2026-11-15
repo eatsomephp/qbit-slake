@@ -1,5 +1,6 @@
-/* https://github.com/rebelot/kanagawa.nvim — Lotus in light mode, Wave in dark mode. */
-:root[data-theme='kanagawa'] {
+/* https://github.com/rebelot/kanagawa.nvim — Lotus in light mode; Wave or Dragon in dark mode. */
+:root[data-theme='kanagawa'],
+:root[data-theme='kanagawa-dragon'] {
   --background: #f2ecbc;
   --foreground: #545464;
   --card: #f2ecbc;
@@ -43,4 +44,27 @@
   --chart-upload: #ffa066;
   --success: #98bb6c;
   --warning: #e6c384;
+}
+
+:root.dark[data-theme='kanagawa-dragon'] {
+  --background: #181616;
+  --foreground: #c5c9c5;
+  --card: #0d0c0c;
+  --popover: #0d0c0c;
+  --primary: #8ba4b0;
+  --primary-foreground: #181616;
+  --secondary: #282727;
+  --muted: #282727;
+  --muted-foreground: #a6a69c;
+  --accent: #282727;
+  --destructive: #c4746e;
+  --destructive-foreground: #181616;
+  --border: #393836;
+  --input: #625e5a;
+  --sidebar: #12120f;
+  --sidebar-accent: #282727;
+  --chart-download: #8ea4a2;
+  --chart-upload: #b6927b;
+  --success: #87a987;
+  --warning: #c4b28a;
 }

@@ -1,10 +1,18 @@
 export const BUILT_IN_THEMES = [
   { id: 'default', label: 'Default' },
   { id: 'rose-pine', label: 'Rosé Pine' },
-  { id: 'catppuccin', label: 'Catppuccin' },
+  { id: 'rose-pine-moon', label: 'Rosé Pine Moon' },
+  { id: 'catppuccin', label: 'Catppuccin Mocha' },
+  { id: 'catppuccin-macchiato', label: 'Catppuccin Macchiato' },
+  { id: 'catppuccin-frappe', label: 'Catppuccin Frappé' },
   { id: 'gruvbox', label: 'Gruvbox' },
-  { id: 'kanagawa', label: 'Kanagawa' },
+  { id: 'gruvbox-hard', label: 'Gruvbox Hard' },
+  { id: 'gruvbox-soft', label: 'Gruvbox Soft' },
+  { id: 'kanagawa', label: 'Kanagawa Wave' },
+  { id: 'kanagawa-dragon', label: 'Kanagawa Dragon' },
   { id: 'tokyo-night', label: 'Tokyo Night' },
+  { id: 'tokyo-night-storm', label: 'Tokyo Night Storm' },
+  { id: 'tokyo-night-moon', label: 'Tokyo Night Moon' },
 ] as const;
 
 export type BuiltInThemeId = (typeof BUILT_IN_THEMES)[number]['id'];

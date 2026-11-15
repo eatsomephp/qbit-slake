@@ -1,5 +1,7 @@
-/* https://catppuccin.com/palette — Latte in light mode, Mocha in dark mode. */
-:root[data-theme='catppuccin'] {
+/* https://catppuccin.com/palette — Latte in light mode; Mocha, Macchiato, or Frappé in dark mode. */
+:root[data-theme='catppuccin'],
+:root[data-theme='catppuccin-macchiato'],
+:root[data-theme='catppuccin-frappe'] {
   --background: #eff1f5;
   --foreground: #4c4f69;
   --card: #eff1f5;
@@ -43,4 +45,50 @@
   --chart-upload: #fab387;
   --success: #a6e3a1;
   --warning: #f9e2af;
+}
+
+:root.dark[data-theme='catppuccin-macchiato'] {
+  --background: #24273a;
+  --foreground: #cad3f5;
+  --card: #1e2030;
+  --popover: #1e2030;
+  --primary: #c6a0f6;
+  --primary-foreground: #24273a;
+  --secondary: #363a4f;
+  --muted: #363a4f;
+  --muted-foreground: #a5adcb;
+  --accent: #363a4f;
+  --destructive: #ed8796;
+  --destructive-foreground: #24273a;
+  --border: #363a4f;
+  --input: #494d64;
+  --sidebar: #1e2030;
+  --sidebar-accent: #363a4f;
+  --chart-download: #8aadf4;
+  --chart-upload: #f5a97f;
+  --success: #a6da95;
+  --warning: #eed49f;
+}
+
+:root.dark[data-theme='catppuccin-frappe'] {
+  --background: #303446;
+  --foreground: #c6d0f5;
+  --card: #292c3c;
+  --popover: #292c3c;
+  --primary: #ca9ee6;
+  --primary-foreground: #303446;
+  --secondary: #414559;
+  --muted: #414559;
+  --muted-foreground: #a5adce;
+  --accent: #414559;
+  --destructive: #e78284;
+  --destructive-foreground: #303446;
+  --border: #414559;
+  --input: #51576d;
+  --sidebar: #292c3c;
+  --sidebar-accent: #414559;
+  --chart-download: #8caaee;
+  --chart-upload: #ef9f76;
+  --success: #a6d189;
+  --warning: #e5c890;
 }
