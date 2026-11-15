@@ -4,6 +4,8 @@ import { createPinia, setActivePinia } from 'pinia';
 import { DEFAULT_RAW_TORRENT } from '@/sync/normalize';
 import { TorrentState } from '@/constants/qbit';
 import { emptyFilters } from '@/lib/torrentFilters';
+import { TORRENT_TABLE_ID } from '@/lib/keyboardTargets';
+import { useSelectionStore } from '@/stores/selection';
 import { useTorrentsStore } from '@/stores/torrents';
 import { useUiStore } from '@/stores/ui';
 import SearchBox from './SearchBox.vue';
@@ -33,7 +35,18 @@ beforeEach(() => {
 });
 
 const mounted: ReturnType<typeof mount>[] = [];
-afterEach(() => mounted.splice(0).forEach((w) => w.unmount()));
+afterEach(() => {
+  mounted.splice(0).forEach((w) => w.unmount());
+  document.getElementById(TORRENT_TABLE_ID)?.remove();
+});
+
+function attachTable() {
+  const table = document.createElement('div');
+  table.id = TORRENT_TABLE_ID;
+  table.tabIndex = 0;
+  document.body.appendChild(table);
+  return table;
+}
 
 function mountBox() {
   const wrapper = mount(SearchBox, { attachTo: document.body });
@@ -347,5 +360,96 @@ describe('SearchBox: clearing', () => {
     await type(box, 'abc');
     await box.input.trigger('keydown', { key: 'Escape' });
     expect(box.ui.search).toBe('');
+  });
+});
+
+describe('SearchBox: handing off to the table', () => {
+  it.each(['Enter', 'ArrowDown'])(
+    '%s commits the query, moves the cursor to the first row and focuses the table',
+    async (key) => {
+      const table = attachTable();
+      const box = mountBox();
+      const selection = useSelectionStore();
+      await type(box, 'tag:keeper');
+      await box.input.trigger('keydown', { key: 'Escape' });
+      await box.input.trigger('keydown', { key });
+      await flushPromises();
+      const firstHash = useTorrentsStore().filteredSorted[0]!.hash;
+      expect(box.ui.filters.tag.include).toEqual(['keeper']);
+      expect(selection.focused).toBe(firstHash);
+      expect(selection.size).toBe(0);
+      expect(document.activeElement).toBe(table);
+    },
+  );
+
+  it('moves the cursor to the first row of the filtered results', async () => {
+    attachTable();
+    const box = mountBox();
+    const selection = useSelectionStore();
+    box.ui.filters = { ...emptyFilters(), tag: { include: ['keeper'], exclude: [] } };
+    await box.input.trigger('keydown', { key: 'Enter' });
+    expect(selection.focused).toBe(useTorrentsStore().filteredSorted[0]!.hash);
+    expect(useTorrentsStore().filteredSorted).toHaveLength(1);
+  });
+
+  it('focuses the table without moving the cursor when nothing matches', async () => {
+    const table = attachTable();
+    const box = mountBox();
+    const selection = useSelectionStore();
+    box.ui.search = 'no such torrent';
+    await box.input.trigger('keydown', { key: 'Enter' });
+    expect(useTorrentsStore().filteredSorted).toHaveLength(0);
+    expect(selection.focused).toBeNull();
+    expect(document.activeElement).toBe(table);
+  });
+
+  it('does not hand off while the suggestion list is open', async () => {
+    const table = attachTable();
+    const box = mountBox();
+    const selection = useSelectionStore();
+    await type(box, 'tag:');
+    await box.input.trigger('keydown', { key: 'ArrowDown' });
+    expect(selection.focused).toBeNull();
+    expect(document.activeElement).not.toBe(table);
+  });
+
+  it('does not hand off while an IME composition is active', async () => {
+    const table = attachTable();
+    const box = mountBox();
+    const selection = useSelectionStore();
+    await box.input.trigger('keydown', { key: 'Enter', isComposing: true });
+    expect(selection.focused).toBeNull();
+    expect(document.activeElement).not.toBe(table);
+  });
+
+  it('Escape clears the text first and keeps focus in the box', async () => {
+    const table = attachTable();
+    const box = mountBox();
+    await type(box, 'abc');
+    box.input.element.focus();
+    await box.input.trigger('keydown', { key: 'Escape' });
+    expect(box.ui.search).toBe('');
+    expect(document.activeElement).toBe(box.input.element);
+    expect(document.activeElement).not.toBe(table);
+  });
+
+  it('Escape on an empty box focuses the table', async () => {
+    const table = attachTable();
+    const box = mountBox();
+    box.input.element.focus();
+    await box.input.trigger('keydown', { key: 'Escape' });
+    expect(document.activeElement).toBe(table);
+  });
+
+  it('a second Escape after the list is dismissed and the text cleared focuses the table', async () => {
+    const table = attachTable();
+    const box = mountBox();
+    await type(box, 'tag:');
+    await box.input.trigger('keydown', { key: 'Escape' });
+    await box.input.trigger('keydown', { key: 'Escape' });
+    expect(box.ui.search).toBe('');
+    expect(document.activeElement).not.toBe(table);
+    await box.input.trigger('keydown', { key: 'Escape' });
+    expect(document.activeElement).toBe(table);
   });
 });

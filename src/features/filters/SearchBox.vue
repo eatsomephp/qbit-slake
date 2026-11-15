@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Kbd } from '@/components/ui/kbd';
 import { menuItemClass, menuSurfaceClass } from '@/components/ui/menu/menuClasses';
 import { cn } from '@/lib/utils';
+import { TORRENT_TABLE_ID } from '@/lib/keyboardTargets';
+import { useSelectionStore } from '@/stores/selection';
 import { useTorrentsStore } from '@/stores/torrents';
 import { useSavedViewsStore } from '@/stores/savedViews';
 import { useUiStore } from '@/stores/ui';
@@ -34,6 +36,7 @@ import FilterChips from './FilterChips.vue';
 
 const ui = useUiStore();
 const torrents = useTorrentsStore();
+const selection = useSelectionStore();
 const savedViews = useSavedViewsStore();
 const isMobile = useIsMobile();
 
@@ -167,10 +170,26 @@ function onKeydown(event: KeyboardEvent) {
       return;
     }
   }
-  if (event.key === 'Enter') commit(null);
-  else if (event.key === 'Escape') ui.search = '';
+  if ((event.key === 'Enter' || event.key === 'ArrowDown') && !event.isComposing) {
+    event.preventDefault();
+    commit(null);
+    jumpToFirstResult();
+  } else if (event.key === 'Escape') {
+    if (ui.search) ui.search = '';
+    else focusTable();
+  }
   // Ignoring key repeat stops a held Backspace from wiping every filter after the text.
   else if (event.key === 'Backspace' && !ui.search && !event.repeat) popIntoText(event);
+}
+
+function focusTable() {
+  document.getElementById(TORRENT_TABLE_ID)?.focus();
+}
+
+function jumpToFirstResult() {
+  const firstResult = torrents.filteredSorted[0];
+  if (firstResult) selection.moveCursor(firstResult.hash);
+  focusTable();
 }
 
 function popIntoText(event: KeyboardEvent) {
