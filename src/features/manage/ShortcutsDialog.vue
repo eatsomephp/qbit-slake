@@ -114,8 +114,8 @@ const visibleSections = computed(() =>
         <li>Put a number before a move to repeat it: <Kbd>5</Kbd><Kbd>j</Kbd>.</li>
         <template v-if="isMainView">
           <li>
-            Hold <Kbd>Shift</Kbd> with the arrow keys, or press <Kbd>v</Kbd> first, to extend
-            the selection.
+            Hold <Kbd>Shift</Kbd> with the arrow keys, or press <Kbd>v</Kbd> first, to extend the
+            selection.
           </li>
           <li>The details panel and each page list their own keys under <Kbd>?</Kbd>.</li>
         </template>
