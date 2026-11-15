@@ -25,11 +25,14 @@ A fast, keyboard-driven, alternative WebUI for qBittorrent 5+
 Downloads the latest release into `~/.local/share/qbit-slake`. Rerun to update.
 
 ```sh
-curl -fsSL \
-  -o /tmp/slake.zip \
+tmp=$(mktemp -d) \
+&& curl -fsSL -o "$tmp/slake.zip" \
   https://github.com/eatsomephp/qbit-slake/releases/latest/download/qbit-slake.zip \
-&& unzip -oq /tmp/slake.zip \
-  -d ~/.local/share \
+&& unzip -q "$tmp/slake.zip" -d "$tmp" \
+&& mkdir -p ~/.local/share \
+&& rm -rf ~/.local/share/qbit-slake \
+&& mv "$tmp/qbit-slake" ~/.local/share/ \
+&& rm -rf "$tmp" \
 && echo "$HOME/.local/share/qbit-slake"
 ```
 
