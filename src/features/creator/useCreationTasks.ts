@@ -15,7 +15,7 @@ export function isUnfinished(task: TorrentCreationTask): boolean {
 }
 
 export function taskName(task: TorrentCreationTask): string {
-  return hostPathName(task.sourcePath) || task.id;
+  return task.sourcePath ? hostPathName(task.sourcePath) : task.id;
 }
 
 export function useCreationTasks() {

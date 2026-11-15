@@ -66,7 +66,7 @@ export function rememberedPart(form: CreatorForm): RememberedCreatorOptions {
 export const PIECE_SIZES = [0, ...Array.from({ length: 14 }, (_, i) => 1024 << (i + 4))];
 
 export function pieceSizeLabel(bytes: number): string {
-  return bytes ? formatBytes(bytes, 'binary').replace(/\.00 /, ' ') : 'Automatic';
+  return bytes ? formatBytes(bytes, 'binary').replace(/\.0+ /, ' ') : 'Automatic';
 }
 
 export const FORMAT_LABELS: Record<TorrentFormat, string> = {
