@@ -1,0 +1,48 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+# Points qBittorrent's alternative WebUI at /qbit-slake (shipped by this mod).
+# Set SLAKE_DISABLE=true to leave qBittorrent's settings untouched.
+
+CONF=/config/qBittorrent/qBittorrent.conf
+ROOT=/qbit-slake
+
+echo "**** Slake: $(cat "${ROOT}/version.txt" 2>/dev/null || echo unknown) ****"
+
+# The UI lives in the image, so a custom theme is kept in /config and copied in on start.
+THEME_SOURCE=/config/qbit-slake-theme.css
+THEME_TARGET="${ROOT}/public/theme.css"
+if [[ -f "${THEME_SOURCE}" ]]; then
+    install -m 644 "${THEME_SOURCE}" "${THEME_TARGET}"
+    echo "**** Slake: using custom theme from ${THEME_SOURCE} ****"
+else
+    rm -f "${THEME_TARGET}"
+fi
+
+if [[ "${SLAKE_DISABLE,,}" == "true" ]]; then
+    echo "**** Slake: SLAKE_DISABLE is set, not changing qBittorrent settings ****"
+    exit 0
+fi
+
+if [[ ! -f "${CONF}" ]]; then
+    echo "**** Slake: ${CONF} not found yet; enable it once under Options > Web UI ****"
+    exit 0
+fi
+
+# qBittorrent 5.x reads these from [WebUI]; the 4.x location, WebUI\* under [Preferences], is ignored.
+# set_pref SECTION KEY VALUE: replace the key in that section, adding the section if missing.
+set_pref() {
+    local updated
+    updated="$(awk -v section="[$1]" -v key="$2" -v value="$3" '
+        /^\[/ { in_section = ($0 == section) }
+        in_section && index($0, key "=") == 1 { next }
+        { print }
+        $0 == section { print key "=" value; found = 1 }
+        END { if (!found) printf "\n%s\n%s=%s\n", section, key, value }
+    ' "${CONF}")" || return 1
+    printf '%s\n' "${updated}" > "${CONF}"
+}
+
+set_pref WebUI AlternativeUIEnabled true
+set_pref WebUI RootFolder "${ROOT}"
+lsiown abc:abc "${CONF}"
+echo "**** Slake: alternative WebUI enabled at ${ROOT} ****"

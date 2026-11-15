@@ -1,0 +1,5 @@
+allowBuilds:
+  vue-demi: false
+minimumReleaseAgeExclude:
+  - '@vitejs/plugin-vue@6.0.11'
+  - prettier@3.10.1

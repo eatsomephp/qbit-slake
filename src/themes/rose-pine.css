@@ -1,0 +1,46 @@
+/* https://rosepinetheme.com/palette — Dawn in light mode, main in dark mode. */
+:root[data-theme='rose-pine'] {
+  --background: #faf4ed;
+  --foreground: #575279;
+  --card: #fffaf3;
+  --popover: #fffaf3;
+  --primary: #907aa9;
+  --primary-foreground: #fffaf3;
+  --secondary: #f2e9e1;
+  --muted: #f2e9e1;
+  --muted-foreground: #797593;
+  --accent: #f2e9e1;
+  --destructive: #b4637a;
+  --destructive-foreground: #fffaf3;
+  --border: #dfdad9;
+  --input: #dfdad9;
+  --sidebar: #f8f0e7;
+  --sidebar-accent: #f2e9e1;
+  --chart-download: #286983;
+  --chart-upload: #ea9d34;
+  --success: #286983;
+  --warning: #ea9d34;
+}
+
+:root.dark[data-theme='rose-pine'] {
+  --background: #191724;
+  --foreground: #e0def4;
+  --card: #1f1d2e;
+  --popover: #1f1d2e;
+  --primary: #c4a7e7;
+  --primary-foreground: #191724;
+  --secondary: #26233a;
+  --muted: #26233a;
+  --muted-foreground: #908caa;
+  --accent: #26233a;
+  --destructive: #eb6f92;
+  --destructive-foreground: #191724;
+  --border: #26233a;
+  --input: #403d52;
+  --sidebar: #16141f;
+  --sidebar-accent: #26233a;
+  --chart-download: #9ccfd8;
+  --chart-upload: #f6c177;
+  --success: #9ccfd8;
+  --warning: #f6c177;
+}

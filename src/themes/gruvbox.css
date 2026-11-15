@@ -1,0 +1,46 @@
+/* https://github.com/morhetz/gruvbox — light (medium) in light mode, dark (medium) in dark mode. */
+:root[data-theme='gruvbox'] {
+  --background: #fbf1c7;
+  --foreground: #3c3836;
+  --card: #f9f5d7;
+  --popover: #f9f5d7;
+  --primary: #076678;
+  --primary-foreground: #fbf1c7;
+  --secondary: #f2e5bc;
+  --muted: #f2e5bc;
+  --muted-foreground: #7c6f64;
+  --accent: #ebdbb2;
+  --destructive: #9d0006;
+  --destructive-foreground: #fbf1c7;
+  --border: #ebdbb2;
+  --input: #d5c4a1;
+  --sidebar: #f2e5bc;
+  --sidebar-accent: #d5c4a1;
+  --chart-download: #076678;
+  --chart-upload: #af3a03;
+  --success: #79740e;
+  --warning: #b57614;
+}
+
+:root.dark[data-theme='gruvbox'] {
+  --background: #282828;
+  --foreground: #ebdbb2;
+  --card: #32302f;
+  --popover: #32302f;
+  --primary: #83a598;
+  --primary-foreground: #282828;
+  --secondary: #3c3836;
+  --muted: #3c3836;
+  --muted-foreground: #a89984;
+  --accent: #3c3836;
+  --destructive: #fb4934;
+  --destructive-foreground: #282828;
+  --border: #3c3836;
+  --input: #504945;
+  --sidebar: #1d2021;
+  --sidebar-accent: #3c3836;
+  --chart-download: #83a598;
+  --chart-upload: #fe8019;
+  --success: #b8bb26;
+  --warning: #fabd2f;
+}
