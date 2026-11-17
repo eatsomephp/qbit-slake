@@ -48,7 +48,7 @@ import { mobileSidebarOpen } from './torrents/mobileState';
 import { useIsMobile } from '@/composables/useIsMobile';
 import { activeFilterCount } from '@/lib/torrentFilters';
 import SearchBox from './filters/SearchBox.vue';
-import DisplayMenu from './torrents/DisplayMenu.vue';
+import TableViewButton from './torrents/TableViewButton.vue';
 import SortMenu from './torrents/SortMenu.vue';
 
 const app = useAppStore();
@@ -259,7 +259,7 @@ function toggleSidebar() {
     <div v-if="!(isMobile && hasSelection)" class="flex shrink-0 items-center gap-0.5">
       <template v-if="!isMobile">
         <SortMenu />
-        <DisplayMenu />
+        <TableViewButton />
         <Button
           v-tooltip="
             withShortcut(

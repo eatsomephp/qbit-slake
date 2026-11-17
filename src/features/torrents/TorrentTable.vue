@@ -302,7 +302,7 @@ function onRowDoubleClick(event: MouseEvent) {
   const hash = rowHash(event);
   if (!hash || isOnRowCheckbox(event)) return;
   addOrSelectOnly(hash);
-  ui.expandDetails();
+  ui.showDetails();
 }
 
 /** Right-click on an unselected row selects it before the menu opens. */

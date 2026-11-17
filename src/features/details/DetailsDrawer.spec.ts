@@ -108,13 +108,18 @@ describe('DetailsDrawer', () => {
     expect(w.text()).toContain('timed out');
   });
 
-  it('collapses to the tab strip and expands when a tab is clicked', async () => {
+  it('hides the drawer from its hide button', async () => {
     useSelectionStore().selectOnly('h1');
     const w = mountDrawer();
-    await w.get('[aria-label="Collapse details"]').trigger('click');
-    expect(w.find('[role=tabpanel]').exists()).toBe(false);
-    expect(w.get('section').attributes('style')).toContain('height: 32px');
-    await w.findAll('[role=tab]')[3]!.trigger('click');
+    await w.get('[aria-label="Hide details"]').trigger('click');
+    expect(useUiStore().detailsOpen).toBe(false);
+  });
+
+  it('keeps the panel open when the active tab is clicked again', async () => {
+    useSelectionStore().selectOnly('h1');
+    const w = mountDrawer();
+    await w.findAll('[role=tab]')[0]!.trigger('click');
+    expect(w.find('[role=tabpanel]').exists()).toBe(true);
     expect(useUiStore().detailsOpen).toBe(true);
   });
 
