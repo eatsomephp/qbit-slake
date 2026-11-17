@@ -1,7 +1,7 @@
 export const menuSurfaceClass =
   'z-50 rounded-md border bg-popover p-1 text-sm text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.98]';
 
-export const menuContentClass = `${menuSurfaceClass} min-w-44 overflow-hidden`;
+export const menuContentClass = `${menuSurfaceClass} min-w-44 overflow-y-auto`;
 export const menuSubContentClass = `${menuSurfaceClass} max-h-80 min-w-40 overflow-y-auto`;
 
 const menuRow =

@@ -7,7 +7,10 @@ defineOptions({ inheritAttrs: false });
 
 <template>
   <ContextMenuPortal>
-    <ContextMenuContent v-bind="$attrs" :class="menuContentClass">
+    <ContextMenuContent
+      v-bind="$attrs"
+      :class="[menuContentClass, 'max-h-(--reka-context-menu-content-available-height)']"
+    >
       <slot />
     </ContextMenuContent>
   </ContextMenuPortal>
