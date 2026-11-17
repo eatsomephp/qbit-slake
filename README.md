@@ -59,11 +59,13 @@ Copy `theme.example.css` to `theme.css` in `qbit-slake/public/` and edit. Unset 
 
 ```sh
 pnpm install
-cp .env.sample .env.local   # set VITE_QBT_TARGET, or VITE_USE_MOCK=true
-pnpm dev
+pnpm dev:demo     # mock backend with fake torrents
+pnpm dev:docker   # start with qBittorent Docker as backend
+pnpm dev          # use existing qBittorent (VITE_QBT_TARGET)
 ```
 
 `pnpm build` outputs to `qbit-slake/`.
+`pnpm preview:demo` serves a demo build at http://localhost:4173.
 
 ## License
 
