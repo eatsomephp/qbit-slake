@@ -7,8 +7,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { SegmentedControl, type SegmentedOption } from '@/components/ui/segmented';
 import { useUiStore, type TableView } from '@/stores/ui';
+import { withShortcut } from '@/shortcuts/engine';
 import { HIDEABLE_COLUMNS, useColumnVisibility } from './useColumnVisibility';
-import SortControl from './SortControl.vue';
+import { displayMenuOpen } from './menuState';
 
 const ui = useUiStore();
 const columns = useColumnVisibility();
@@ -23,12 +24,12 @@ const columnsApply = computed(() => ui.tableView !== 'stacked');
 </script>
 
 <template>
-  <Popover>
+  <Popover v-model:open="displayMenuOpen">
     <PopoverTrigger as-child>
       <Button
-        v-tooltip="'Layout, sort and columns'"
+        v-tooltip="withShortcut('Layout and columns', '<Space>uo')"
         variant="muted"
-        size="icon-sm"
+        size="icon"
         class="shrink-0"
         aria-label="Display options"
       >
@@ -40,17 +41,6 @@ const columnsApply = computed(() => ui.tableView !== 'stacked');
         <h3 class="text-xs font-medium text-muted-foreground">Layout</h3>
         <SegmentedControl v-model="ui.tableView" label="Layout" :options="LAYOUTS" />
       </section>
-      <section class="flex flex-col gap-1.5">
-        <h3 class="text-xs font-medium text-muted-foreground">Sort</h3>
-        <div class="flex items-center gap-1.5">
-          <SortControl />
-        </div>
-      </section>
-      <label class="flex items-center gap-2 text-sm">
-        <Checkbox v-model="ui.multiSelect" />
-        Multi-select
-        <span class="text-xs text-muted-foreground">(clicks add to selection)</span>
-      </label>
       <section class="flex flex-col gap-1.5 border-t pt-3">
         <div class="flex items-center justify-between">
           <h3 class="text-xs font-medium text-muted-foreground">Columns</h3>

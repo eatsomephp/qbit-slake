@@ -217,7 +217,7 @@ const optionId = (index: number) => `torrent-search-option-${index}`;
 
 <template>
   <div
-    class="relative flex h-8 max-w-full min-w-0 flex-1 cursor-text items-center rounded-lg border bg-muted/60 transition-colors hover:bg-muted md:max-w-2xl"
+    class="relative flex h-9 max-w-full min-w-0 flex-1 cursor-text items-center rounded-lg border bg-muted/60 transition-colors hover:bg-muted md:max-w-2xl"
     :class="[
       problems.length ? 'border-destructive/60' : 'border-transparent',
       isFocused && 'bg-muted ring-1',
@@ -225,7 +225,7 @@ const optionId = (index: number) => `torrent-search-option-${index}`;
     ]"
     @mousedown="focusInputFromFieldBackground"
   >
-    <Search class="pointer-events-none mr-1.5 ml-2.5 size-3.5 shrink-0 text-muted-foreground" />
+    <Search class="pointer-events-none mr-2 ml-3 size-4 shrink-0 text-muted-foreground" />
     <div
       ref="chipScroller"
       class="flex h-full min-w-0 flex-1 items-center gap-1 overflow-x-auto [scrollbar-width:none]"

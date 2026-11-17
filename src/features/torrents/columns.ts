@@ -217,7 +217,43 @@ export const DEFAULT_HIDDEN_COLUMNS: Record<string, boolean> = Object.fromEntrie
   torrentColumns.filter((c) => !ESSENTIAL_COLUMNS.has(c.id!)).map((c) => [c.id!, false]),
 );
 
-export const SORTABLE_FIELDS = torrentColumns.map((c) => ({ id: c.id!, label: String(c.header) }));
+const SORT_LABELS: Record<string, string> = {
+  dlspeed: 'Download speed',
+  upspeed: 'Upload speed',
+  addedOn: 'Added on',
+  completionOn: 'Completed on',
+  creationDate: 'Created on',
+  downloadedSession: 'Downloaded this session',
+  uploadedSession: 'Uploaded this session',
+  dlLimit: 'Download limit',
+  upLimit: 'Upload limit',
+  priority: 'Queue position',
+};
+
+export const COMMON_SORT_FIELD_IDS = [
+  'addedOn',
+  'name',
+  'size',
+  'progress',
+  'state',
+  'dlspeed',
+  'upspeed',
+  'eta',
+  'ratio',
+];
+
+export const SORTABLE_FIELDS = torrentColumns.map((c) => ({
+  id: c.id!,
+  label: SORT_LABELS[c.id!] ?? String(c.header),
+  descFirst: c.sortDescFirst === true,
+}));
+
+export const COMMON_SORT_FIELDS = COMMON_SORT_FIELD_IDS.map((id) =>
+  SORTABLE_FIELDS.find((field) => field.id === id)!,
+);
+export const OTHER_SORT_FIELDS = SORTABLE_FIELDS.filter(
+  (field) => !COMMON_SORT_FIELD_IDS.includes(field.id),
+);
 
 export function reorderColumns(
   savedOrder: readonly string[],

@@ -5,7 +5,6 @@ export type BrowserFieldKey =
   | 'colorScheme'
   | 'sidebarCountMode'
   | 'tagsInName'
-  | 'multiSelect'
   | 'refreshInterval'
   | 'sizeUnit'
   | 'speedUnit'
@@ -41,11 +40,6 @@ export const BROWSER_FIELDS: Record<BrowserFieldKey, BrowserField> = {
     key: 'tagsInName',
     label: 'Tags next to names',
     hint: "Show each torrent's tags as chips after its name instead of in a Tags column.",
-  },
-  multiSelect: {
-    key: 'multiSelect',
-    label: 'Multi-select',
-    hint: 'Clicking a torrent adds it to the selection, or removes it, instead of replacing the selection. Shows checkboxes.',
   },
   refreshInterval: {
     key: 'refreshInterval',

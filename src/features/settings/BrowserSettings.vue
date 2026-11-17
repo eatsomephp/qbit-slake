@@ -57,7 +57,6 @@ const {
   colorScheme,
   sidebarCountMode,
   tagsInName,
-  multiSelect,
   refreshInterval,
   sizeUnit,
   speedUnit,
@@ -102,9 +101,6 @@ const {
     </SettingRow>
     <SettingRow v-if="shows('tagsInName')" :label="tagsInName.label" :hint="tagsInName.hint">
       <Checkbox v-model="ui.tagsInName" :aria-label="tagsInName.label" />
-    </SettingRow>
-    <SettingRow v-if="shows('multiSelect')" :label="multiSelect.label" :hint="multiSelect.hint">
-      <Checkbox v-model="ui.multiSelect" :aria-label="multiSelect.label" />
     </SettingRow>
     <SettingRow
       v-if="shows('refreshInterval')"
