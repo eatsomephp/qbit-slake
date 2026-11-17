@@ -106,7 +106,7 @@ function startSidebarResize(event: PointerEvent) {
             <TorrentTable />
           </TorrentContextMenu>
         </div>
-        <DetailsDrawer v-if="selection.size" />
+        <DetailsDrawer v-if="selection.size && ui.detailsOpen" />
       </div>
     </div>
 

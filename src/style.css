@@ -235,8 +235,8 @@
     transition: width 0.6s ease-out;
   }
   .progress-down {
-    --progress-from: color-mix(in oklch, var(--chart-download) 45%, var(--primary));
-    --progress-to: color-mix(in oklab, var(--chart-download) 85%, var(--foreground));
+    --progress-from: color-mix(in oklab, var(--chart-download) 40%, var(--background));
+    --progress-to: color-mix(in oklab, var(--chart-download) 75%, var(--foreground));
   }
   .progress-up {
     --progress-from: color-mix(in oklch, var(--chart-upload) 45%, var(--warning));

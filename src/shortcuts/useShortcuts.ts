@@ -7,7 +7,7 @@ import { useAppStore } from '@/stores/app';
 import { useSelectionStore } from '@/stores/selection';
 import { UNDO_KEYS, useToastsStore } from '@/stores/toasts';
 import { useTorrentsStore } from '@/stores/torrents';
-import { DETAILS_TABS, useUiStore, type ColorScheme, type TableView } from '@/stores/ui';
+import { DETAILS_TABS, useUiStore, type ColorScheme } from '@/stores/ui';
 import { useCopyText } from '@/composables/useCopyText';
 import { openAdd } from '@/features/add/addState';
 import { openManage } from '@/features/manage/manageState';
@@ -15,14 +15,13 @@ import { COPY_FIELDS, copyTextOf } from '@/features/torrents/copyFields';
 import { rowsInView } from '@/features/torrents/tableViewport';
 import { useTorrentActions } from '@/features/torrents/useTorrentActions';
 import { useSortChoice } from '@/features/torrents/useSortChoice';
-import { displayMenuOpen, sortMenuOpen } from '@/features/torrents/menuState';
+import { sortMenuOpen } from '@/features/torrents/menuState';
 import { useIsMobile } from '@/composables/useIsMobile';
 import type { QueueMove } from '@/types/app';
 import { keyState, useKeymap, type Binding, type KeyGroup, type RunContext } from './engine';
 import { FILTER_KEY_GROUPS, useFilterBindings } from './filterBindings';
 import { cheatSheetBinding, gotoBindings } from './pageShortcuts';
 
-const TABLE_VIEWS: TableView[] = ['stacked', 'comfortable', 'compact'];
 const COLOR_SCHEMES: ColorScheme[] = ['system', 'light', 'dark'];
 
 function nextInCycle<T>(values: readonly T[], current: T, step = 1): T {
@@ -121,13 +120,13 @@ export function useShortcuts() {
   }
 
   function stepDetailsTab(step: 1 | -1) {
+    if (!ui.detailsOpen) return ui.showDetails();
     ui.detailsTab = nextInCycle(DETAILS_TABS, ui.detailsTab, step);
-    ui.detailsOpen = true;
   }
 
   async function focusDetailsPanel() {
     if (!selection.size && selection.focused) selection.selectOnly(selection.focused);
-    ui.expandDetails();
+    ui.showDetails();
     await nextTick();
     document.getElementById(DETAILS_PANEL_ID)?.focus();
   }
@@ -239,7 +238,7 @@ export function useShortcuts() {
       label: 'Open details',
       section: 'details',
       isEnabled: () => selection.focused !== null || hasSelection(),
-      run: () => ui.expandDetails(),
+      run: () => ui.showDetails(),
     },
     {
       keys: 'q',
@@ -470,13 +469,13 @@ export function useShortcuts() {
       label: 'Toggle the details drawer',
       section: 'app',
       isEnabled: hasSelection,
-      run: () => (ui.detailsOpen ? (ui.detailsOpen = false) : ui.expandDetails()),
+      run: () => (ui.detailsOpen ? (ui.detailsOpen = false) : ui.showDetails()),
     },
     {
       keys: '<Space>uv',
-      label: 'Cycle table density',
+      label: 'Cycle table layout',
       section: 'app',
-      run: () => (ui.tableView = nextInCycle(TABLE_VIEWS, ui.tableView)),
+      run: ui.cycleTableView,
     },
     {
       keys: '<Space>um',
@@ -497,13 +496,6 @@ export function useShortcuts() {
       label: 'Reverse the sort direction',
       section: 'app',
       run: sort.flipDirection,
-    },
-    {
-      keys: '<Space>uo',
-      label: 'Layout and column options',
-      section: 'app',
-      isAvailable: () => !isMobile.value,
-      run: () => (displayMenuOpen.value = true),
     },
     {
       keys: '<Space>uc',

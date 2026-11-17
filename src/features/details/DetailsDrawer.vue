@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useElementSize } from '@vueuse/core';
-import { ChevronDown, ChevronUp, X } from '@lucide/vue';
+import { ChevronDown, X } from '@lucide/vue';
 import CopyableText from '@/components/CopyableText.vue';
 import { Button } from '@/components/ui/button';
 import { useSelectionStore } from '@/stores/selection';
@@ -43,12 +43,7 @@ const torrent = computed(() => {
 });
 
 function selectTab(id: DetailsTab) {
-  if (ui.detailsOpen && ui.detailsTab === id && !sheet.value) {
-    ui.detailsOpen = false;
-    return;
-  }
   ui.detailsTab = id;
-  ui.detailsOpen = true;
 }
 
 function maxHeight() {
@@ -56,8 +51,6 @@ function maxHeight() {
 }
 
 const sheet = computed(() => props.mode === 'sheet');
-/** In sheet mode the panel is always open; the drawer can collapse to its tab strip. */
-const open = computed(() => sheet.value || ui.detailsOpen);
 
 const generalContent = ref<HTMLElement | null>(null);
 const { height: generalContentHeight } = useElementSize(generalContent);
@@ -73,30 +66,18 @@ function autoHeight() {
 }
 
 const height = computed(() => {
-  if (!ui.detailsOpen) return TAB_STRIP;
   const wanted = ui.detailsHeight ?? (ui.autoSizeDetails ? autoHeight() : FALLBACK_HEIGHT);
   return Math.min(Math.max(wanted, MIN_HEIGHT), maxHeight());
 });
-
-const COLLAPSE_SNAP_HEIGHT = (MIN_HEIGHT + TAB_STRIP) / 2;
 
 function startResize(event: PointerEvent) {
   if (sheet.value) return;
   const startY = event.clientY;
   const startHeight = height.value;
-  const startedOpen = ui.detailsOpen;
   const target = event.currentTarget as HTMLElement;
   target.setPointerCapture(event.pointerId);
   const move = (e: PointerEvent) => {
     const draggedHeight = startHeight + startY - e.clientY;
-    if (draggedHeight < COLLAPSE_SNAP_HEIGHT) {
-      ui.detailsOpen = false;
-      return;
-    }
-    if (!ui.detailsOpen) {
-      if (startedOpen) ui.detailsOpen = true;
-      else ui.expandDetails();
-    }
     ui.detailsHeight = Math.min(Math.max(draggedHeight, MIN_HEIGHT), maxHeight());
   };
   const end = () => {
@@ -107,11 +88,6 @@ function startResize(event: PointerEvent) {
   target.addEventListener('pointermove', move);
   target.addEventListener('pointerup', end);
   target.addEventListener('pointercancel', end);
-}
-
-function toggleDetails() {
-  if (ui.detailsOpen) ui.detailsOpen = false;
-  else ui.expandDetails();
 }
 
 const SCROLL_LINE_PX = 24;
@@ -150,7 +126,6 @@ useDetailsKeymap(() => [
       aria-label="Resize details"
       class="absolute inset-x-0 -top-1 z-10 h-2 cursor-row-resize touch-none hover:bg-primary/30"
       @pointerdown="startResize"
-      @dblclick="toggleDetails"
     />
     <div v-if="sheet" class="flex h-11 shrink-0 items-center gap-2 border-b pr-2 pl-4">
       <span class="min-w-0 flex-1 truncate text-sm font-medium">{{ torrent?.name }}</span>
@@ -169,10 +144,10 @@ useDetailsKeymap(() => [
         :key="tab.id"
         type="button"
         role="tab"
-        :aria-selected="open && ui.detailsTab === tab.id"
+        :aria-selected="ui.detailsTab === tab.id"
         class="h-6 shrink-0 rounded-sm px-2 text-xs"
         :class="
-          open && ui.detailsTab === tab.id
+          ui.detailsTab === tab.id
             ? 'bg-accent text-foreground'
             : 'text-muted-foreground hover:text-foreground'
         "
@@ -182,24 +157,17 @@ useDetailsKeymap(() => [
       </button>
       <button
         v-if="!sheet"
-        v-tooltip="
-          withShortcut(ui.detailsOpen ? 'Collapse details' : 'Expand details', '<Space>ud')
-        "
+        v-tooltip="withShortcut('Hide details', '<Space>ud')"
         type="button"
-        :aria-label="ui.detailsOpen ? 'Collapse details' : 'Expand details'"
-        :aria-expanded="ui.detailsOpen"
+        aria-label="Hide details"
         class="group mx-1 flex h-6 min-w-20 flex-1 cursor-pointer items-center gap-2 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
-        @click="toggleDetails"
+        @click="ui.detailsOpen = false"
       >
         <span
           class="h-px flex-1 bg-muted-foreground/25 transition-colors group-hover:bg-primary/70"
         />
-        <component
-          :is="ui.detailsOpen ? ChevronDown : ChevronUp"
-          class="size-3.5 shrink-0 transition-transform"
-          :class="ui.detailsOpen ? 'group-hover:translate-y-0.5' : 'group-hover:-translate-y-0.5'"
-        />
-        <span class="shrink-0">{{ ui.detailsOpen ? 'Collapse' : 'Expand' }}</span>
+        <ChevronDown class="size-3.5 shrink-0 transition-transform group-hover:translate-y-0.5" />
+        <span class="shrink-0">Hide</span>
         <span
           class="h-px flex-1 bg-muted-foreground/25 transition-colors group-hover:bg-primary/70"
         />
@@ -212,7 +180,7 @@ useDetailsKeymap(() => [
       </div>
       <SelectionStepper v-if="!sheet && selection.size > 1" />
     </div>
-    <div v-if="open" ref="tabPanel" role="tabpanel" class="@container min-h-0 flex-1 overflow-auto">
+    <div ref="tabPanel" role="tabpanel" class="@container min-h-0 flex-1 overflow-auto">
       <p v-if="!torrent" class="p-3 text-xs text-muted-foreground">
         Select a torrent to see its details.
       </p>

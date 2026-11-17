@@ -32,6 +32,7 @@ export const DETAILS_TAB_LABELS: Record<DetailsTab, string> = {
 export type ColorScheme = 'system' | 'light' | 'dark';
 export type SidebarCountMode = 'matching' | 'all';
 export type TableView = 'stacked' | 'comfortable' | 'compact';
+export const TABLE_VIEWS: readonly TableView[] = ['stacked', 'comfortable', 'compact'];
 export const COLOR_SCHEME_KEY = KEY + 'theme';
 export const THEME_KEY = KEY + 'themeId';
 
@@ -90,9 +91,14 @@ export const useUiStore = defineStore('ui', () => {
     if (defaultDetailsTab.value !== 'last') detailsTab.value = defaultDetailsTab.value;
   }
 
-  function expandDetails() {
+  function showDetails() {
     if (!detailsOpen.value) switchToDefaultDetailsTab();
     detailsOpen.value = true;
+  }
+
+  function cycleTableView() {
+    const index = TABLE_VIEWS.indexOf(tableView.value);
+    tableView.value = TABLE_VIEWS[(index + 1) % TABLE_VIEWS.length]!;
   }
 
   function clearFilters() {
@@ -134,7 +140,8 @@ export const useUiStore = defineStore('ui', () => {
     updateFilterGroup,
     toggleFilterValue,
     switchToDefaultDetailsTab,
-    expandDetails,
+    showDetails,
+    cycleTableView,
     clearFilters,
   };
 });
