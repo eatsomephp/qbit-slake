@@ -22,7 +22,9 @@ withDefaults(
       :align="align"
       :reference="reference"
       :side-offset="4"
-      :class="cn(menuContentClass, $props.class)"
+      :class="
+        cn(menuContentClass, 'max-h-(--reka-dropdown-menu-content-available-height)', $props.class)
+      "
     >
       <slot />
     </DropdownMenuContent>
