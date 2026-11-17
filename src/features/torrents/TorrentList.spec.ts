@@ -103,10 +103,12 @@ describe('TorrentList (phone)', () => {
     const w = mount(TorrentList);
     await flushPromises();
     await w.get('select[aria-label="Sort by"]').setValue('name');
-    expect(useUiStore().sorting).toEqual([{ id: 'name', desc: true }]);
-    await w.get('button[aria-label="Descending"]').trigger('click');
     expect(useUiStore().sorting).toEqual([{ id: 'name', desc: false }]);
     await flushPromises();
     expect(w.findAll('[role=listitem]')[0]!.text()).toContain('Alpha');
+    await w.get('button[aria-label="Ascending"]').trigger('click');
+    expect(useUiStore().sorting).toEqual([{ id: 'name', desc: true }]);
+    await w.get('select[aria-label="Sort by"]').setValue('size');
+    expect(useUiStore().sorting).toEqual([{ id: 'size', desc: true }]);
   });
 });

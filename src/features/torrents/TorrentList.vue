@@ -45,7 +45,7 @@ watch(mobileDetailsOpen, (isOpen) => {
 
 <template>
   <div class="flex h-full flex-col">
-    <TorrentSortBar :count="rows.length" class="h-9" />
+    <TorrentSortBar :count="rows.length" class="h-12" />
 
     <div ref="scrollEl" class="min-h-0 flex-1 overflow-y-auto overscroll-contain" role="list">
       <div class="relative" :style="{ height: `${virtualizer.getTotalSize()}px` }">

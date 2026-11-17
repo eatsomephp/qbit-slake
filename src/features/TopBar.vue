@@ -6,6 +6,7 @@ import {
   ChartNoAxesColumn,
   ChevronDown,
   Keyboard,
+  ListChecks,
   Pause,
   Ellipsis,
   FilePlus,
@@ -27,6 +28,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { RouterLink, useRouter } from 'vue-router';
@@ -47,6 +49,7 @@ import { useIsMobile } from '@/composables/useIsMobile';
 import { activeFilterCount } from '@/lib/torrentFilters';
 import SearchBox from './filters/SearchBox.vue';
 import DisplayMenu from './torrents/DisplayMenu.vue';
+import SortMenu from './torrents/SortMenu.vue';
 
 const app = useAppStore();
 const router = useRouter();
@@ -101,7 +104,7 @@ function toggleSidebar() {
 </script>
 
 <template>
-  <header class="flex h-11 shrink-0 items-center gap-2 border-b px-2 md:px-3">
+  <header class="@container flex h-12 shrink-0 items-center gap-2 border-b px-2 md:px-3">
     <Transition
       mode="out-in"
       enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
@@ -117,7 +120,7 @@ function toggleSidebar() {
         <Button
           v-tooltip="'Clear selection'"
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           aria-label="Clear selection"
           @click="selection.clear()"
         >
@@ -132,7 +135,7 @@ function toggleSidebar() {
         <Button
           v-tooltip="sidebarToggleTooltip"
           variant="muted"
-          size="icon-sm"
+          size="icon"
           class="relative"
           :aria-label="sidebarToggleLabel"
           @click="toggleSidebar"
@@ -143,14 +146,13 @@ function toggleSidebar() {
           <span
             v-if="!isMobile && !ui.sidebarOpen && anyFilterActive"
             v-tooltip="'Filters are active'"
-            class="absolute top-1 right-1 size-1.5 rounded-full bg-primary"
+            class="absolute top-1.5 right-1.5 size-2 rounded-full bg-primary"
           />
         </Button>
         <div ref="addSplitButton" class="flex shrink-0 items-center">
           <Button
             v-tooltip="withShortcut('Add torrents', 'a')"
             variant="soft"
-            size="sm"
             class="rounded-r-none"
             @click="openAdd()"
           >
@@ -161,8 +163,8 @@ function toggleSidebar() {
               <Button
                 v-tooltip="'More add options'"
                 variant="soft"
-                size="icon-sm"
-                class="w-5 rounded-l-none border-l border-primary/20"
+                size="icon"
+                class="w-6 rounded-l-none border-l border-primary/20"
                 aria-label="More add options"
               >
                 <ChevronDown class="size-3" />
@@ -185,15 +187,18 @@ function toggleSidebar() {
       leave-active-class="transition duration-100 ease-in motion-reduce:transition-none"
       leave-to-class="opacity-0 translate-x-1"
     >
+      <!-- Stays mounted on desktop (faded, fixed width) so selecting doesn't shift the search box; a plain v-if brings the shift back. -->
       <div
-        v-if="hasSelection"
+        v-if="hasSelection || !isMobile"
         role="toolbar"
         aria-label="Selected torrents"
-        class="flex shrink-0 items-center gap-0.5 md:rounded-lg md:bg-muted/60 md:p-0.5"
+        :inert="!hasSelection"
+        class="flex shrink-0 items-center gap-0.5 transition-opacity duration-150 motion-reduce:transition-none md:rounded-lg md:bg-muted/60 md:p-0.5"
+        :class="!hasSelection && 'pointer-events-none opacity-0 @max-5xl:hidden'"
       >
         <Chip
           v-if="!isMobile"
-          class="mx-0.5"
+          class="mx-0.5 min-w-28 justify-between"
           remove-label="Clear selection"
           remove-tooltip="Clear selection (Esc)"
           @remove="selection.clear()"
@@ -202,20 +207,22 @@ function toggleSidebar() {
         </Chip>
         <span v-if="!isMobile" aria-hidden="true" class="mx-0.5 h-4 w-px bg-border" />
         <Button
-          v-if="selectedRunState.canStart"
+          v-if="selectedRunState.canStart || !isMobile"
           v-tooltip="withShortcut('Start', 's')"
+          :disabled="!selectedRunState.canStart"
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           aria-label="Start"
           @click="actions.start(selection.hashes)"
         >
           <Play />
         </Button>
         <Button
-          v-if="selectedRunState.canStop"
+          v-if="selectedRunState.canStop || !isMobile"
           v-tooltip="withShortcut('Stop', 's')"
+          :disabled="!selectedRunState.canStop"
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           aria-label="Stop"
           @click="actions.stop(selection.hashes)"
         >
@@ -224,7 +231,7 @@ function toggleSidebar() {
         <Button
           v-tooltip="withShortcut('Delete…', 'dd')"
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           class="hover:text-destructive"
           aria-label="Delete"
           @click="actions.confirmDelete(selection.hashes)"
@@ -236,7 +243,7 @@ function toggleSidebar() {
             <Button
               v-tooltip="'More actions'"
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               aria-label="More actions"
             >
               <Ellipsis />
@@ -250,11 +257,35 @@ function toggleSidebar() {
     </Transition>
 
     <div v-if="!(isMobile && hasSelection)" class="flex shrink-0 items-center gap-0.5">
-      <DisplayMenu v-if="!isMobile" />
+      <template v-if="!isMobile">
+        <SortMenu />
+        <DisplayMenu />
+        <Button
+          v-tooltip="
+            withShortcut(
+              ui.multiSelect
+                ? 'Checkbox selection is on: clicks add to the selection'
+                : 'Checkbox selection: clicks add to the selection instead of replacing it',
+              '<Space>um',
+            )
+          "
+          variant="muted"
+          size="icon"
+          aria-label="Checkbox selection"
+          :aria-pressed="ui.multiSelect"
+          :class="
+            ui.multiSelect && 'bg-highlight text-primary hover:bg-highlight hover:text-primary'
+          "
+          @click="ui.multiSelect = !ui.multiSelect"
+        >
+          <ListChecks />
+        </Button>
+        <span aria-hidden="true" class="mx-1 h-5 w-px bg-border" />
+      </template>
       <Button
         v-tooltip="withShortcut('Search engine', 'ge')"
         variant="muted"
-        size="icon-sm"
+        size="icon"
         aria-label="Search engine"
         as-child
       >
@@ -264,7 +295,7 @@ function toggleSidebar() {
         v-if="rssEnabled"
         v-tooltip="withShortcut('RSS', 'gr')"
         variant="muted"
-        size="icon-sm"
+        size="icon"
         aria-label="RSS"
         as-child
       >
@@ -274,7 +305,7 @@ function toggleSidebar() {
         <Button
           v-tooltip="withShortcut('Settings', 'gs')"
           variant="muted"
-          size="icon-sm"
+          size="icon"
           class="rounded-r-none"
           aria-label="Settings"
           as-child
@@ -284,10 +315,10 @@ function toggleSidebar() {
         <DropdownMenu :modal="false">
           <DropdownMenuTrigger as-child>
             <Button
-              v-tooltip="'More'"
+              v-tooltip="'Log, statistics, sign out'"
               variant="muted"
-              size="icon-sm"
-              class="w-4 rounded-l-none"
+              size="icon"
+              class="w-6 rounded-l-none"
               aria-label="More"
             >
               <ChevronDown class="size-3" />
@@ -303,18 +334,11 @@ function toggleSidebar() {
             <DropdownMenuItem v-if="!isMobile" @select="openCheatSheet">
               <Keyboard />Keyboard shortcuts<MenuShortcut keys="?" />
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem @select="signOut"><LogOut />Sign out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Button
-        v-tooltip="'Sign out'"
-        variant="muted"
-        size="icon-sm"
-        aria-label="Sign out"
-        @click="signOut"
-      >
-        <LogOut />
-      </Button>
     </div>
   </header>
 </template>

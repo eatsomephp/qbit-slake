@@ -1,48 +1,35 @@
 <script setup lang="ts">
 import { vTooltip } from '@/components/tooltip/vTooltip';
-import { computed } from 'vue';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import { NativeSelect } from '@/components/ui/select';
-import { useUiStore } from '@/stores/ui';
-import { SORTABLE_FIELDS } from './columns';
+import { COMMON_SORT_FIELDS, OTHER_SORT_FIELDS } from './columns';
+import { useSortChoice } from './useSortChoice';
 
-withDefaults(defineProps<{ size?: 'default' | 'sm' }>(), { size: 'default' });
-
-const ui = useUiStore();
-
-const sortId = computed({
-  get: () => ui.sorting[0]?.id ?? 'addedOn',
-  set: (id) => (ui.sorting = [{ id, desc: ui.sorting[0]?.desc ?? true }]),
-});
-const directionLabel = computed(() => (ui.sorting[0]?.desc ? 'Descending' : 'Ascending'));
-
-function flipSortDirection() {
-  const primary = ui.sorting[0] ?? { id: 'addedOn', desc: true };
-  ui.sorting = [{ id: primary.id, desc: !primary.desc }];
-}
+const { fieldId, isDescending, directionLabel, flipDirection } = useSortChoice();
 </script>
 
 <template>
-  <NativeSelect
-    v-model="sortId"
-    aria-label="Sort by"
-    :size="size"
-    class="text-foreground"
-    :class="size === 'default' && 'flex-1'"
-  >
-    <option v-for="field in SORTABLE_FIELDS" :key="field.id" :value="field.id">
-      {{ field.label }}
-    </option>
+  <NativeSelect v-model="fieldId" aria-label="Sort by" class="min-w-0 flex-1 text-foreground">
+    <optgroup label="Common">
+      <option v-for="field in COMMON_SORT_FIELDS" :key="field.id" :value="field.id">
+        {{ field.label }}
+      </option>
+    </optgroup>
+    <optgroup label="More columns">
+      <option v-for="field in OTHER_SORT_FIELDS" :key="field.id" :value="field.id">
+        {{ field.label }}
+      </option>
+    </optgroup>
   </NativeSelect>
   <Button
     v-tooltip="directionLabel"
-    :variant="size === 'sm' ? 'ghost' : 'outline'"
-    :size="size === 'sm' ? 'icon-xs' : 'icon'"
+    variant="outline"
+    size="icon"
     :aria-label="directionLabel"
-    @click="flipSortDirection"
+    @click="flipDirection"
   >
-    <ArrowDownWideNarrow v-if="ui.sorting[0]?.desc" />
+    <ArrowDownWideNarrow v-if="isDescending" />
     <ArrowUpNarrowWide v-else />
   </Button>
 </template>

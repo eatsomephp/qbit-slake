@@ -5,6 +5,7 @@ import { useUiStore } from '@/stores/ui';
 import { DEFAULT_HIDDEN_COLUMNS } from './columns';
 import { HIDEABLE_COLUMNS } from './useColumnVisibility';
 import DisplayMenu from './DisplayMenu.vue';
+import { displayMenuOpen } from './menuState';
 
 let wrapper: VueWrapper | undefined;
 
@@ -15,6 +16,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  displayMenuOpen.value = false;
   wrapper?.unmount();
   wrapper = undefined;
   document.body.innerHTML = '';
@@ -63,12 +65,11 @@ describe('DisplayMenu', () => {
     expect(useUiStore().tableView).toBe('stacked');
   });
 
-  it('toggles multi-select', async () => {
-    await openMenu();
-    const checkbox = document.body.querySelector<HTMLElement>('label [role=checkbox]')!;
-    checkbox.click();
+  it('opens from the shared menu state used by the keyboard shortcut', async () => {
+    wrapper = mount(DisplayMenu, { attachTo: document.body });
+    displayMenuOpen.value = true;
     await flushPromises();
-    expect(useUiStore().multiSelect).toBe(true);
+    expect(document.body.querySelector('[role=radiogroup]')).not.toBeNull();
   });
 
   it('lists every hideable column with its current visibility', async () => {

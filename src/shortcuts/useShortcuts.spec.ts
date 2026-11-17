@@ -314,6 +314,19 @@ describe('details and app shortcuts', () => {
     expect(ui.tableView).not.toBe(view);
   });
 
+  it('Space u m toggles checkbox selection and Space u r reverses the sort', () => {
+    const { ui } = setup();
+    press(' ');
+    press('u');
+    press('m');
+    expect(ui.multiSelect).toBe(true);
+    const desc = ui.sorting[0]!.desc;
+    press(' ');
+    press('u');
+    press('r');
+    expect(ui.sorting[0]!.desc).toBe(!desc);
+  });
+
   it('? opens the cheat sheet', () => {
     setup();
     press('?', { shiftKey: true });

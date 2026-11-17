@@ -14,6 +14,9 @@ import { openManage } from '@/features/manage/manageState';
 import { COPY_FIELDS, copyTextOf } from '@/features/torrents/copyFields';
 import { rowsInView } from '@/features/torrents/tableViewport';
 import { useTorrentActions } from '@/features/torrents/useTorrentActions';
+import { useSortChoice } from '@/features/torrents/useSortChoice';
+import { displayMenuOpen, sortMenuOpen } from '@/features/torrents/menuState';
+import { useIsMobile } from '@/composables/useIsMobile';
 import type { QueueMove } from '@/types/app';
 import { keyState, useKeymap, type Binding, type KeyGroup, type RunContext } from './engine';
 import { FILTER_KEY_GROUPS, useFilterBindings } from './filterBindings';
@@ -47,6 +50,8 @@ export function useShortcuts() {
   const toasts = useToastsStore();
   const actions = useTorrentActions();
   const copyText = useCopyText();
+  const sort = useSortChoice();
+  const isMobile = useIsMobile();
 
   const hasSelection = () => selection.size > 0;
   const hasRows = () => torrents.filteredSorted.length > 0;
@@ -472,6 +477,33 @@ export function useShortcuts() {
       label: 'Cycle table density',
       section: 'app',
       run: () => (ui.tableView = nextInCycle(TABLE_VIEWS, ui.tableView)),
+    },
+    {
+      keys: '<Space>um',
+      label: 'Toggle checkbox selection',
+      section: 'app',
+      isAvailable: () => !isMobile.value,
+      run: () => (ui.multiSelect = !ui.multiSelect),
+    },
+    {
+      keys: '<Space>us',
+      label: 'Choose the sort column',
+      section: 'app',
+      isAvailable: () => !isMobile.value,
+      run: () => (sortMenuOpen.value = true),
+    },
+    {
+      keys: '<Space>ur',
+      label: 'Reverse the sort direction',
+      section: 'app',
+      run: sort.flipDirection,
+    },
+    {
+      keys: '<Space>uo',
+      label: 'Layout and column options',
+      section: 'app',
+      isAvailable: () => !isMobile.value,
+      run: () => (displayMenuOpen.value = true),
     },
     {
       keys: '<Space>uc',
