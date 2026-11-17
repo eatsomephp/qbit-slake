@@ -2,6 +2,7 @@
 import type { HTMLAttributes } from 'vue';
 import { DropdownMenuContent, DropdownMenuPortal, type ReferenceElement } from 'reka-ui';
 import { cn } from '@/lib/utils';
+import { useRestoreFocusOnClose } from '../menu/useRestoreFocusOnClose';
 import { menuContentClass } from '../menu/menuClasses';
 
 withDefaults(
@@ -13,6 +14,8 @@ withDefaults(
   }>(),
   { side: 'bottom', align: 'center', reference: undefined, class: undefined },
 );
+
+const restoreFocus = useRestoreFocusOnClose();
 </script>
 
 <template>
@@ -25,6 +28,7 @@ withDefaults(
       :class="
         cn(menuContentClass, 'max-h-(--reka-dropdown-menu-content-available-height)', $props.class)
       "
+      @close-auto-focus="restoreFocus"
     >
       <slot />
     </DropdownMenuContent>

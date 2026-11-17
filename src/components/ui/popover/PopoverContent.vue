@@ -2,6 +2,7 @@
 import type { HTMLAttributes } from 'vue';
 import { PopoverContent, PopoverPortal } from 'reka-ui';
 import { cn } from '@/lib/utils';
+import { useRestoreFocusOnClose } from '../menu/useRestoreFocusOnClose';
 
 withDefaults(
   defineProps<{
@@ -11,6 +12,8 @@ withDefaults(
   }>(),
   { side: 'bottom', align: 'center', class: undefined },
 );
+
+const restoreFocus = useRestoreFocusOnClose();
 </script>
 
 <template>
@@ -25,6 +28,7 @@ withDefaults(
           $props.class,
         )
       "
+      @close-auto-focus="restoreFocus"
     >
       <slot />
     </PopoverContent>
