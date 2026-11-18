@@ -106,7 +106,7 @@ describe('TorrentList (phone)', () => {
     expect(useUiStore().sorting).toEqual([{ id: 'name', desc: false }]);
     await flushPromises();
     expect(w.findAll('[role=listitem]')[0]!.text()).toContain('Alpha');
-    await w.get('button[aria-label="Ascending"]').trigger('click');
+    await w.get('button[aria-label="Sort order: A → Z"]').trigger('click');
     expect(useUiStore().sorting).toEqual([{ id: 'name', desc: true }]);
     await w.get('select[aria-label="Sort by"]').setValue('size');
     expect(useUiStore().sorting).toEqual([{ id: 'size', desc: true }]);

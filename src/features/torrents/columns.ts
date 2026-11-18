@@ -242,11 +242,55 @@ export const COMMON_SORT_FIELD_IDS = [
   'ratio',
 ];
 
+export interface SortOrderLabels {
+  asc: string;
+  desc: string;
+}
+
+export const ALPHABETICAL_ORDER: SortOrderLabels = { asc: 'A → Z', desc: 'Z → A' };
+const BY_AMOUNT: SortOrderLabels = { asc: 'Lowest first', desc: 'Highest first' };
+const BY_SIZE: SortOrderLabels = { asc: 'Smallest first', desc: 'Largest first' };
+const BY_DATE: SortOrderLabels = { asc: 'Oldest first', desc: 'Newest first' };
+const BY_SPEED: SortOrderLabels = { asc: 'Slowest first', desc: 'Fastest first' };
+const BY_DURATION: SortOrderLabels = { asc: 'Shortest first', desc: 'Longest first' };
+
+const SORT_ORDER_LABELS: Record<string, SortOrderLabels> = {
+  size: BY_SIZE,
+  totalSize: BY_SIZE,
+  downloaded: BY_SIZE,
+  uploaded: BY_SIZE,
+  downloadedSession: BY_SIZE,
+  uploadedSession: BY_SIZE,
+  completed: BY_SIZE,
+  amountLeft: BY_SIZE,
+  dlspeed: BY_SPEED,
+  upspeed: BY_SPEED,
+  eta: BY_DURATION,
+  timeActive: BY_DURATION,
+  seedingTime: BY_DURATION,
+  reannounce: BY_DURATION,
+  progress: { asc: 'Least done first', desc: 'Most done first' },
+  state: { asc: 'Errors first', desc: 'Stopped first' },
+  private: { asc: 'Public first', desc: 'Private first' },
+};
+
+function sortOrderLabels(column: Col): SortOrderLabels {
+  const labels = SORT_ORDER_LABELS[column.id!];
+  if (labels) return labels;
+  if (column.meta.kind === 'relativeDate') return BY_DATE;
+  return column.meta.align ? BY_AMOUNT : ALPHABETICAL_ORDER;
+}
+
 export const SORTABLE_FIELDS = torrentColumns.map((c) => ({
   id: c.id!,
   label: SORT_LABELS[c.id!] ?? String(c.header),
   descFirst: c.sortDescFirst === true,
+  order: sortOrderLabels(c),
 }));
+
+export function sortFieldOf(id: string) {
+  return SORTABLE_FIELDS.find((field) => field.id === id);
+}
 
 export const COMMON_SORT_FIELDS = COMMON_SORT_FIELD_IDS.map((id) =>
   SORTABLE_FIELDS.find((field) => field.id === id)!,
