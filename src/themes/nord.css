@@ -1,0 +1,46 @@
+/* https://www.nordtheme.com/docs/colors-and-palettes — Snow Storm in light mode; Polar Night in dark mode. */
+:root[data-theme='nord'] {
+  --background: #eceff4;
+  --foreground: #2e3440;
+  --card: #e5e9f0;
+  --popover: #e5e9f0;
+  --primary: #5e81ac;
+  --primary-foreground: #eceff4;
+  --secondary: #e5e9f0;
+  --muted: #e5e9f0;
+  --muted-foreground: #4c566a;
+  --accent: #d8dee9;
+  --destructive: #bf616a;
+  --destructive-foreground: #eceff4;
+  --border: #d8dee9;
+  --input: #c2cad6;
+  --sidebar: #e5e9f0;
+  --sidebar-accent: #d8dee9;
+  --chart-download: #5e81ac;
+  --chart-upload: #d08770;
+  --success: #6a8a52;
+  --warning: #a8812f;
+}
+
+:root.dark[data-theme='nord'] {
+  --background: #2e3440;
+  --foreground: #d8dee9;
+  --card: #3b4252;
+  --popover: #3b4252;
+  --primary: #88c0d0;
+  --primary-foreground: #2e3440;
+  --secondary: #3b4252;
+  --muted: #3b4252;
+  --muted-foreground: #a0a8b7;
+  --accent: #434c5e;
+  --destructive: #bf616a;
+  --destructive-foreground: #2e3440;
+  --border: #434c5e;
+  --input: #4c566a;
+  --sidebar: #272c36;
+  --sidebar-accent: #3b4252;
+  --chart-download: #88c0d0;
+  --chart-upload: #d08770;
+  --success: #a3be8c;
+  --warning: #ebcb8b;
+}

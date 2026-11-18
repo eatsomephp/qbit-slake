@@ -1,0 +1,70 @@
+/* https://github.com/ayu-theme/ayu-colors — Light in light mode; Dark or Mirage in dark mode. */
+:root[data-theme='ayu'],
+:root[data-theme='ayu-mirage'] {
+  --background: #fcfcfc;
+  --foreground: #5c6166;
+  --card: #f8f9fa;
+  --popover: #f8f9fa;
+  --primary: #fa8d3e;
+  --primary-foreground: #fcfcfc;
+  --secondary: #f3f4f5;
+  --muted: #f3f4f5;
+  --muted-foreground: #787b80;
+  --accent: #e7eaed;
+  --destructive: #e65050;
+  --destructive-foreground: #fcfcfc;
+  --border: #e7eaed;
+  --input: #cfd1d6;
+  --sidebar: #f3f4f5;
+  --sidebar-accent: #e7eaed;
+  --chart-download: #399ee6;
+  --chart-upload: #ed9366;
+  --success: #6cbf43;
+  --warning: #f2ae49;
+}
+
+:root.dark[data-theme='ayu'] {
+  --background: #0b0e14;
+  --foreground: #bfbdb6;
+  --card: #0f131a;
+  --popover: #0f131a;
+  --primary: #e6b450;
+  --primary-foreground: #0b0e14;
+  --secondary: #131721;
+  --muted: #131721;
+  --muted-foreground: #7c838e;
+  --accent: #1a1f29;
+  --destructive: #f07178;
+  --destructive-foreground: #0b0e14;
+  --border: #1e232b;
+  --input: #2d323b;
+  --sidebar: #0d1017;
+  --sidebar-accent: #1a1f29;
+  --chart-download: #59c2ff;
+  --chart-upload: #ff8f40;
+  --success: #aad94c;
+  --warning: #ffb454;
+}
+
+:root.dark[data-theme='ayu-mirage'] {
+  --background: #1f2430;
+  --foreground: #cccac2;
+  --card: #232834;
+  --popover: #232834;
+  --primary: #ffcc66;
+  --primary-foreground: #1f2430;
+  --secondary: #232834;
+  --muted: #232834;
+  --muted-foreground: #8a919e;
+  --accent: #2d3340;
+  --destructive: #f28779;
+  --destructive-foreground: #1f2430;
+  --border: #2d3340;
+  --input: #3d4455;
+  --sidebar: #191e2a;
+  --sidebar-accent: #2d3340;
+  --chart-download: #73d0ff;
+  --chart-upload: #ffa659;
+  --success: #87d96c;
+  --warning: #ffd173;
+}

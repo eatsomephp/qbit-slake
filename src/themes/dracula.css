@@ -1,0 +1,46 @@
+/* https://draculatheme.com/spec — Alucard in light mode; Dracula in dark mode. */
+:root[data-theme='dracula'] {
+  --background: #fffbeb;
+  --foreground: #1f1f1f;
+  --card: #fffbeb;
+  --popover: #fffbeb;
+  --primary: #644ac9;
+  --primary-foreground: #fffbeb;
+  --secondary: #efeddc;
+  --muted: #efeddc;
+  --muted-foreground: #635d97;
+  --accent: #efeddc;
+  --destructive: #cb3a2a;
+  --destructive-foreground: #fffbeb;
+  --border: #e3e1d1;
+  --input: #cfcfde;
+  --sidebar: #efeddc;
+  --sidebar-accent: #cfcfde;
+  --chart-download: #036a96;
+  --chart-upload: #a34d14;
+  --success: #14710a;
+  --warning: #846e15;
+}
+
+:root.dark[data-theme='dracula'] {
+  --background: #282a36;
+  --foreground: #f8f8f2;
+  --card: #21222c;
+  --popover: #21222c;
+  --primary: #bd93f9;
+  --primary-foreground: #282a36;
+  --secondary: #343746;
+  --muted: #343746;
+  --muted-foreground: #9aa3c6;
+  --accent: #44475a;
+  --destructive: #ff5555;
+  --destructive-foreground: #282a36;
+  --border: #44475a;
+  --input: #6272a4;
+  --sidebar: #21222c;
+  --sidebar-accent: #44475a;
+  --chart-download: #8be9fd;
+  --chart-upload: #ffb86c;
+  --success: #50fa7b;
+  --warning: #f1fa8c;
+}

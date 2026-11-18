@@ -1,0 +1,164 @@
+/* https://github.com/EdenEast/nightfox.nvim — Dawnfox in light mode for Duskfox and Dayfox for the rest; the named fox in dark mode. */
+:root[data-theme='nightfox'],
+:root[data-theme='nordfox'],
+:root[data-theme='terafox'],
+:root[data-theme='carbonfox'] {
+  --background: #f6f2ee;
+  --foreground: #3d2b5a;
+  --card: #f6f2ee;
+  --popover: #f6f2ee;
+  --primary: #2848a9;
+  --primary-foreground: #f6f2ee;
+  --secondary: #e4dcd4;
+  --muted: #e4dcd4;
+  --muted-foreground: #643f61;
+  --accent: #e7d2be;
+  --destructive: #a5222f;
+  --destructive-foreground: #f6f2ee;
+  --border: #dbd1dd;
+  --input: #aab0ad;
+  --sidebar: #e4dcd4;
+  --sidebar-accent: #e7d2be;
+  --chart-download: #287980;
+  --chart-upload: #955f61;
+  --success: #396847;
+  --warning: #ac5402;
+}
+
+:root[data-theme='duskfox'] {
+  --background: #faf4ed;
+  --foreground: #575279;
+  --card: #faf4ed;
+  --popover: #faf4ed;
+  --primary: #286983;
+  --primary-foreground: #faf4ed;
+  --secondary: #ebe5df;
+  --muted: #ebe5df;
+  --muted-foreground: #625c87;
+  --accent: #d0d8d8;
+  --destructive: #b4637a;
+  --destructive-foreground: #faf4ed;
+  --border: #ebe0df;
+  --input: #bdbfc9;
+  --sidebar: #ebe5df;
+  --sidebar-accent: #d0d8d8;
+  --chart-download: #56949f;
+  --chart-upload: #d7827e;
+  --success: #618774;
+  --warning: #ea9d34;
+}
+
+:root.dark[data-theme='nightfox'] {
+  --background: #192330;
+  --foreground: #cdcecf;
+  --card: #131a24;
+  --popover: #131a24;
+  --primary: #719cd6;
+  --primary-foreground: #192330;
+  --secondary: #212e3f;
+  --muted: #212e3f;
+  --muted-foreground: #aeafb0;
+  --accent: #2b3b51;
+  --destructive: #c94f6d;
+  --destructive-foreground: #192330;
+  --border: #29394f;
+  --input: #39506d;
+  --sidebar: #131a24;
+  --sidebar-accent: #2b3b51;
+  --chart-download: #63cdcf;
+  --chart-upload: #f4a261;
+  --success: #81b29a;
+  --warning: #dbc074;
+}
+
+:root.dark[data-theme='duskfox'] {
+  --background: #232136;
+  --foreground: #e0def4;
+  --card: #191726;
+  --popover: #191726;
+  --primary: #569fba;
+  --primary-foreground: #232136;
+  --secondary: #2d2a45;
+  --muted: #2d2a45;
+  --muted-foreground: #cdcbe0;
+  --accent: #433c59;
+  --destructive: #eb6f92;
+  --destructive-foreground: #232136;
+  --border: #373354;
+  --input: #4b4673;
+  --sidebar: #191726;
+  --sidebar-accent: #433c59;
+  --chart-download: #9ccfd8;
+  --chart-upload: #ea9a97;
+  --success: #a3be8c;
+  --warning: #f6c177;
+}
+
+:root.dark[data-theme='nordfox'] {
+  --background: #2e3440;
+  --foreground: #cdcecf;
+  --card: #232831;
+  --popover: #232831;
+  --primary: #81a1c1;
+  --primary-foreground: #2e3440;
+  --secondary: #39404f;
+  --muted: #39404f;
+  --muted-foreground: #abb1bb;
+  --accent: #3e4a5b;
+  --destructive: #bf616a;
+  --destructive-foreground: #2e3440;
+  --border: #444c5e;
+  --input: #5a657d;
+  --sidebar: #232831;
+  --sidebar-accent: #3e4a5b;
+  --chart-download: #88c0d0;
+  --chart-upload: #c9826b;
+  --success: #a3be8c;
+  --warning: #ebcb8b;
+}
+
+:root.dark[data-theme='terafox'] {
+  --background: #152528;
+  --foreground: #e6eaea;
+  --card: #0f1c1e;
+  --popover: #0f1c1e;
+  --primary: #5a93aa;
+  --primary-foreground: #152528;
+  --secondary: #1d3337;
+  --muted: #1d3337;
+  --muted-foreground: #cbd9d8;
+  --accent: #293e40;
+  --destructive: #e85c51;
+  --destructive-foreground: #152528;
+  --border: #254147;
+  --input: #2d4f56;
+  --sidebar: #0f1c1e;
+  --sidebar-accent: #293e40;
+  --chart-download: #a1cdd8;
+  --chart-upload: #ff8349;
+  --success: #7aa4a1;
+  --warning: #fda47f;
+}
+
+:root.dark[data-theme='carbonfox'] {
+  --background: #161616;
+  --foreground: #f2f4f8;
+  --card: #0c0c0c;
+  --popover: #0c0c0c;
+  --primary: #78a9ff;
+  --primary-foreground: #161616;
+  --secondary: #252525;
+  --muted: #252525;
+  --muted-foreground: #b6b8bb;
+  --accent: #2a2a2a;
+  --destructive: #ee5396;
+  --destructive-foreground: #161616;
+  --border: #353535;
+  --input: #535353;
+  --sidebar: #0c0c0c;
+  --sidebar-accent: #2a2a2a;
+  --chart-download: #33b1ff;
+  --chart-upload: #ff7eb6;
+  --success: #25be6a;
+  --warning: #f1c21b;
+}

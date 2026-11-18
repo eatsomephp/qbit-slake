@@ -1,0 +1,116 @@
+/* https://primer.style/foundations/color — Light or Light High Contrast in light mode; Dark, Dark Dimmed, or Dark High Contrast in dark mode. */
+:root[data-theme='github'],
+:root[data-theme='github-dimmed'] {
+  --background: #ffffff;
+  --foreground: #1f2328;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --primary: #0969da;
+  --primary-foreground: #ffffff;
+  --secondary: #f6f8fa;
+  --muted: #f6f8fa;
+  --muted-foreground: #656d76;
+  --accent: #eaeef2;
+  --destructive: #d1242f;
+  --destructive-foreground: #ffffff;
+  --border: #d0d7de;
+  --input: #d0d7de;
+  --sidebar: #f6f8fa;
+  --sidebar-accent: #eaeef2;
+  --chart-download: #0969da;
+  --chart-upload: #bc4c00;
+  --success: #1a7f37;
+  --warning: #9a6700;
+}
+
+:root.dark[data-theme='github'] {
+  --background: #0d1117;
+  --foreground: #e6edf3;
+  --card: #161b22;
+  --popover: #161b22;
+  --primary: #2f81f7;
+  --primary-foreground: #0d1117;
+  --secondary: #161b22;
+  --muted: #161b22;
+  --muted-foreground: #7d8590;
+  --accent: #21262d;
+  --destructive: #f85149;
+  --destructive-foreground: #0d1117;
+  --border: #30363d;
+  --input: #30363d;
+  --sidebar: #010409;
+  --sidebar-accent: #21262d;
+  --chart-download: #2f81f7;
+  --chart-upload: #db6d28;
+  --success: #3fb950;
+  --warning: #d29922;
+}
+
+:root.dark[data-theme='github-dimmed'] {
+  --background: #22272e;
+  --foreground: #adbac7;
+  --card: #2d333b;
+  --popover: #2d333b;
+  --primary: #539bf5;
+  --primary-foreground: #22272e;
+  --secondary: #2d333b;
+  --muted: #2d333b;
+  --muted-foreground: #8b98a5;
+  --accent: #373e47;
+  --destructive: #e5534b;
+  --destructive-foreground: #22272e;
+  --border: #444c56;
+  --input: #545d68;
+  --sidebar: #1c2128;
+  --sidebar-accent: #373e47;
+  --chart-download: #539bf5;
+  --chart-upload: #cc6b2c;
+  --success: #57ab5a;
+  --warning: #c69026;
+}
+
+:root[data-theme='github-high-contrast'] {
+  --background: #ffffff;
+  --foreground: #0e1116;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --primary: #0349b4;
+  --primary-foreground: #ffffff;
+  --secondary: #e7ecf0;
+  --muted: #e7ecf0;
+  --muted-foreground: #4b535d;
+  --accent: #e7ecf0;
+  --destructive: #a0111f;
+  --destructive-foreground: #ffffff;
+  --border: #88929d;
+  --input: #20252c;
+  --sidebar: #e7ecf0;
+  --sidebar-accent: #ced5dc;
+  --chart-download: #0349b4;
+  --chart-upload: #873800;
+  --success: #055d20;
+  --warning: #744500;
+}
+
+:root.dark[data-theme='github-high-contrast'] {
+  --background: #0a0c10;
+  --foreground: #f0f3f6;
+  --card: #272b33;
+  --popover: #272b33;
+  --primary: #71b7ff;
+  --primary-foreground: #0a0c10;
+  --secondary: #272b33;
+  --muted: #272b33;
+  --muted-foreground: #b7bdc8;
+  --accent: #272b33;
+  --destructive: #ff6a69;
+  --destructive-foreground: #0a0c10;
+  --border: #7a828e;
+  --input: #9ea7b3;
+  --sidebar: #010409;
+  --sidebar-accent: #272b33;
+  --chart-download: #71b7ff;
+  --chart-upload: #e7811d;
+  --success: #26cd4d;
+  --warning: #f0b72f;
+}
