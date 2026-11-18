@@ -6,7 +6,8 @@ import { NativeSelect } from '@/components/ui/select';
 import { COMMON_SORT_FIELDS, OTHER_SORT_FIELDS } from './columns';
 import { useSortChoice } from './useSortChoice';
 
-const { fieldId, isDescending, directionLabel, flipDirection } = useSortChoice();
+const { fieldId, isDescending, directionLabel, reversedDirectionLabel, flipDirection } =
+  useSortChoice();
 </script>
 
 <template>
@@ -23,10 +24,10 @@ const { fieldId, isDescending, directionLabel, flipDirection } = useSortChoice()
     </optgroup>
   </NativeSelect>
   <Button
-    v-tooltip="directionLabel"
+    v-tooltip="`${directionLabel}, tap for ${reversedDirectionLabel.toLowerCase()}`"
     variant="outline"
     size="icon"
-    :aria-label="directionLabel"
+    :aria-label="`Sort order: ${directionLabel}`"
     @click="flipDirection"
   >
     <ArrowDownWideNarrow v-if="isDescending" />
