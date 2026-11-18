@@ -5,6 +5,14 @@
 @import './themes/gruvbox.css';
 @import './themes/kanagawa.css';
 @import './themes/tokyo-night.css';
+@import './themes/everforest.css';
+@import './themes/nord.css';
+@import './themes/solarized.css';
+@import './themes/dracula.css';
+@import './themes/github.css';
+@import './themes/ayu.css';
+@import './themes/atom-one.css';
+@import './themes/nightfox.css';
 
 @custom-variant dark (&:is(.dark *));
 

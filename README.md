@@ -11,7 +11,7 @@ A fast, keyboard-driven, alternative WebUI for qBittorrent 5+
 - Saved filter views, plus conditions like `ratio>2` or `size>=100GiB`
 - Vim-style keymaps with which-key and a cheat sheet (`?`)
 - Mobile layout, installable as a PWA
-- Themes: [Rosé Pine](https://rosepinetheme.com) (main, Moon), [Catppuccin](https://catppuccin.com) (Mocha, Macchiato, Frappé), [Gruvbox](https://github.com/morhetz/gruvbox) (medium, hard, soft), [Kanagawa](https://github.com/rebelot/kanagawa.nvim) (Wave, Dragon), [Tokyo Night](https://github.com/folke/tokyonight.nvim) (Night, Storm, Moon), or your own `theme.css`, each with a light mode
+- Themes: [Rosé Pine](https://rosepinetheme.com) (main, Moon), [Catppuccin](https://catppuccin.com) (Mocha, Macchiato, Frappé), [Gruvbox](https://github.com/morhetz/gruvbox) (medium, hard, soft), [Kanagawa](https://github.com/rebelot/kanagawa.nvim) (Wave, Dragon), [Tokyo Night](https://github.com/folke/tokyonight.nvim) (Night, Storm, Moon), [Everforest](https://github.com/sainnhe/everforest) (medium, hard, soft), [Nord](https://www.nordtheme.com), [Solarized](https://ethanschoonover.com/solarized), [Dracula](https://draculatheme.com), [GitHub](https://primer.style) (default, Dimmed, High Contrast), [Ayu](https://github.com/ayu-theme/ayu-colors) (Dark, Mirage), [Atom One](https://github.com/atom/atom/tree/master/packages/one-dark-ui), [Nightfox](https://github.com/EdenEast/nightfox.nvim) (Nightfox, Duskfox, Nordfox, Terafox, Carbonfox), or your own `theme.css`, each with a light mode
 
 <p align="center">
   <img src="public/screenshots/narrow.png" width="260" alt="Slake on mobile">

@@ -1,0 +1,46 @@
+/* https://ethanschoonover.com/solarized — light in light mode, dark in dark mode. */
+:root[data-theme='solarized'] {
+  --background: #fdf6e3;
+  --foreground: #586e75;
+  --card: #fdf6e3;
+  --popover: #fdf6e3;
+  --primary: #268bd2;
+  --primary-foreground: #fdf6e3;
+  --secondary: #eee8d5;
+  --muted: #eee8d5;
+  --muted-foreground: #657b83;
+  --accent: #eee8d5;
+  --destructive: #dc322f;
+  --destructive-foreground: #fdf6e3;
+  --border: #eee8d5;
+  --input: #93a1a1;
+  --sidebar: #eee8d5;
+  --sidebar-accent: #e4ddc8;
+  --chart-download: #268bd2;
+  --chart-upload: #cb4b16;
+  --success: #859900;
+  --warning: #b58900;
+}
+
+:root.dark[data-theme='solarized'] {
+  --background: #002b36;
+  --foreground: #93a1a1;
+  --card: #073642;
+  --popover: #073642;
+  --primary: #268bd2;
+  --primary-foreground: #002b36;
+  --secondary: #073642;
+  --muted: #073642;
+  --muted-foreground: #839496;
+  --accent: #073642;
+  --destructive: #dc322f;
+  --destructive-foreground: #002b36;
+  --border: #073642;
+  --input: #586e75;
+  --sidebar: #00212b;
+  --sidebar-accent: #073642;
+  --chart-download: #268bd2;
+  --chart-upload: #cb4b16;
+  --success: #859900;
+  --warning: #b58900;
+}

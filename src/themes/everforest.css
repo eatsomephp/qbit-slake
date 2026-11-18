@@ -1,0 +1,138 @@
+/* https://github.com/sainnhe/everforest — light in light mode, dark in dark mode, each in medium, hard, or soft contrast. */
+:root[data-theme='everforest'] {
+  --background: #fdf6e3;
+  --foreground: #5c6a72;
+  --card: #f4f0d9;
+  --popover: #f4f0d9;
+  --primary: #8da101;
+  --primary-foreground: #fdf6e3;
+  --secondary: #f4f0d9;
+  --muted: #f4f0d9;
+  --muted-foreground: #708079;
+  --accent: #efebd4;
+  --destructive: #f85552;
+  --destructive-foreground: #fdf6e3;
+  --border: #e6e2cc;
+  --input: #bdc3af;
+  --sidebar: #efebd4;
+  --sidebar-accent: #e6e2cc;
+  --chart-download: #3a94c5;
+  --chart-upload: #f57d26;
+  --success: #8da101;
+  --warning: #dfa000;
+}
+
+:root.dark[data-theme='everforest'] {
+  --background: #2d353b;
+  --foreground: #d3c6aa;
+  --card: #343f44;
+  --popover: #343f44;
+  --primary: #a7c080;
+  --primary-foreground: #2d353b;
+  --secondary: #343f44;
+  --muted: #343f44;
+  --muted-foreground: #9da9a0;
+  --accent: #3d484d;
+  --destructive: #e67e80;
+  --destructive-foreground: #2d353b;
+  --border: #3d484d;
+  --input: #4f585e;
+  --sidebar: #232a2e;
+  --sidebar-accent: #3d484d;
+  --chart-download: #7fbbb3;
+  --chart-upload: #e69875;
+  --success: #a7c080;
+  --warning: #dbbc7f;
+}
+
+:root[data-theme='everforest-hard'] {
+  --background: #fffbef;
+  --foreground: #5c6a72;
+  --card: #f8f5e4;
+  --popover: #f8f5e4;
+  --primary: #8da101;
+  --primary-foreground: #fffbef;
+  --secondary: #f8f5e4;
+  --muted: #f8f5e4;
+  --muted-foreground: #708079;
+  --accent: #f2efdf;
+  --destructive: #f85552;
+  --destructive-foreground: #fffbef;
+  --border: #edeada;
+  --input: #bec5b2;
+  --sidebar: #f2efdf;
+  --sidebar-accent: #edeada;
+  --chart-download: #3a94c5;
+  --chart-upload: #f57d26;
+  --success: #8da101;
+  --warning: #dfa000;
+}
+
+:root.dark[data-theme='everforest-hard'] {
+  --background: #272e33;
+  --foreground: #d3c6aa;
+  --card: #2e383c;
+  --popover: #2e383c;
+  --primary: #a7c080;
+  --primary-foreground: #272e33;
+  --secondary: #2e383c;
+  --muted: #2e383c;
+  --muted-foreground: #9da9a0;
+  --accent: #374145;
+  --destructive: #e67e80;
+  --destructive-foreground: #272e33;
+  --border: #374145;
+  --input: #495156;
+  --sidebar: #1e2326;
+  --sidebar-accent: #374145;
+  --chart-download: #7fbbb3;
+  --chart-upload: #e69875;
+  --success: #a7c080;
+  --warning: #dbbc7f;
+}
+
+:root[data-theme='everforest-soft'] {
+  --background: #f3ead3;
+  --foreground: #5c6a72;
+  --card: #eae4ca;
+  --popover: #eae4ca;
+  --primary: #8da101;
+  --primary-foreground: #f3ead3;
+  --secondary: #eae4ca;
+  --muted: #eae4ca;
+  --muted-foreground: #708079;
+  --accent: #e5dfc5;
+  --destructive: #f85552;
+  --destructive-foreground: #f3ead3;
+  --border: #ddd8be;
+  --input: #b9c0ab;
+  --sidebar: #e5dfc5;
+  --sidebar-accent: #ddd8be;
+  --chart-download: #3a94c5;
+  --chart-upload: #f57d26;
+  --success: #8da101;
+  --warning: #dfa000;
+}
+
+:root.dark[data-theme='everforest-soft'] {
+  --background: #333c43;
+  --foreground: #d3c6aa;
+  --card: #3a464c;
+  --popover: #3a464c;
+  --primary: #a7c080;
+  --primary-foreground: #333c43;
+  --secondary: #3a464c;
+  --muted: #3a464c;
+  --muted-foreground: #9da9a0;
+  --accent: #434f55;
+  --destructive: #e67e80;
+  --destructive-foreground: #333c43;
+  --border: #434f55;
+  --input: #555f66;
+  --sidebar: #293136;
+  --sidebar-accent: #434f55;
+  --chart-download: #7fbbb3;
+  --chart-upload: #e69875;
+  --success: #a7c080;
+  --warning: #dbbc7f;
+}

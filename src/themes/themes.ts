@@ -13,6 +13,23 @@ export const BUILT_IN_THEMES = [
   { id: 'tokyo-night', label: 'Tokyo Night' },
   { id: 'tokyo-night-storm', label: 'Tokyo Night Storm' },
   { id: 'tokyo-night-moon', label: 'Tokyo Night Moon' },
+  { id: 'everforest', label: 'Everforest' },
+  { id: 'everforest-hard', label: 'Everforest Hard' },
+  { id: 'everforest-soft', label: 'Everforest Soft' },
+  { id: 'nord', label: 'Nord' },
+  { id: 'solarized', label: 'Solarized' },
+  { id: 'dracula', label: 'Dracula' },
+  { id: 'github', label: 'GitHub' },
+  { id: 'github-dimmed', label: 'GitHub Dimmed' },
+  { id: 'github-high-contrast', label: 'GitHub High Contrast' },
+  { id: 'ayu', label: 'Ayu' },
+  { id: 'ayu-mirage', label: 'Ayu Mirage' },
+  { id: 'atom-one', label: 'Atom One' },
+  { id: 'nightfox', label: 'Nightfox' },
+  { id: 'duskfox', label: 'Duskfox' },
+  { id: 'nordfox', label: 'Nordfox' },
+  { id: 'terafox', label: 'Terafox' },
+  { id: 'carbonfox', label: 'Carbonfox' },
 ] as const;
 
 export type BuiltInThemeId = (typeof BUILT_IN_THEMES)[number]['id'];
