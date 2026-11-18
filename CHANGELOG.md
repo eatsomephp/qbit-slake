@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/eatsomephp/qbit-slake/compare/v1.3.0...v1.4.0) (2026-11-18)
+
+
+### Features
+
+* add Everforest, Nord, Solarized, Dracula, GitHub, Ayu, Atom One, and Nightfox themes ([f6fa009](https://github.com/eatsomephp/qbit-slake/commit/f6fa0093d5a27149e3f6ea6ce609c93c6c24a3af))
+
 ## [1.3.0](https://github.com/eatsomephp/qbit-slake/compare/v1.2.0...v1.3.0) (2026-11-18)
 
 
