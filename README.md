@@ -57,15 +57,14 @@ Copy `theme.example.css` to `theme.css` in `qbit-slake/public/` and edit. Unset 
 
 ## Development
 
-```sh
-pnpm install
-pnpm dev:demo     # mock backend with fake torrents
-pnpm dev:docker   # start with qBittorent Docker as backend
-pnpm dev          # use existing qBittorent (VITE_QBT_TARGET)
-```
-
-`pnpm build` outputs to `qbit-slake/`.
-`pnpm preview:demo` serves a demo build at http://localhost:4173.
+| Command             | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| `pnpm install`      | Install dependencies                             |
+| `pnpm dev:demo`     | Mock backend with fake torrents                  |
+| `pnpm dev:docker`   | Start with qBittorrent Docker as backend         |
+| `pnpm dev`          | Use existing qBittorrent (via `VITE_QBT_TARGET`) |
+| `pnpm build`        | Outputs to `qbit-slake/`                         |
+| `pnpm preview:demo` | Serves a demo build at http://localhost:4173     |
 
 ## License
 
