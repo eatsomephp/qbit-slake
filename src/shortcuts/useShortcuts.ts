@@ -33,7 +33,6 @@ export const KEY_GROUPS: KeyGroup[] = [
   { keys: 'g', label: 'Go to' },
   { keys: 'y', label: 'Copy' },
   { keys: 'c', label: 'Change' },
-  { keys: 'd', label: 'Delete' },
   { keys: '<Space>', label: 'Leader' },
   { keys: '<Space>q', label: 'Queue' },
   { keys: '<Space>u', label: 'Interface' },

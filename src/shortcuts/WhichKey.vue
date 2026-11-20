@@ -11,7 +11,9 @@ const MAX_COLUMNS = 4;
 const hints = computed(() =>
   hasPrefix.value ? hintsAfter(activeKeymaps(), keyState.pending) : [],
 );
-const rowCount = computed(() => Math.max(MIN_ROWS, Math.ceil(hints.value.length / MAX_COLUMNS)));
+const rowCount = computed(() =>
+  Math.max(Math.min(MIN_ROWS, hints.value.length), Math.ceil(hints.value.length / MAX_COLUMNS)),
+);
 const title = computed(() =>
   hasPrefix.value ? groupLabel(activeKeymaps(), keyState.pending) : undefined,
 );
@@ -20,6 +22,7 @@ const typedKeys = computed(() => [
   ...keyState.pending.map(tokenLabel),
 ]);
 
+const showsHeader = computed(() => title.value !== undefined || keyState.count !== null);
 const showsPanel = computed(() => keyState.showsHints && hints.value.length > 0);
 const showsCountOnly = computed(() => keyState.showsHints && !hasPrefix.value);
 </script>
@@ -31,14 +34,19 @@ const showsCountOnly = computed(() => keyState.showsHints && !hasPrefix.value);
   >
     <div
       v-if="showsPanel"
-      class="max-w-[min(42rem,calc(100vw-2rem))] rounded-lg border bg-popover p-gutter text-popover-foreground shadow-lg"
+      class="max-w-[min(42rem,calc(100vw-2rem))] rounded-lg border bg-popover text-popover-foreground shadow-lg"
     >
-      <div class="mb-field flex items-center gap-field text-xs">
-        <Kbd v-for="(key, index) in typedKeys" :key="index">{{ key }}</Kbd>
+      <div
+        v-if="showsHeader"
+        class="flex items-baseline gap-section border-b px-gutter py-row text-xs"
+      >
         <span v-if="title" class="font-medium">{{ title }}</span>
+        <span class="font-mono text-muted-foreground" :class="title && 'ml-auto'">
+          {{ typedKeys.join(' ') }}
+        </span>
       </div>
       <ul
-        class="grid grid-flow-col gap-x-section gap-y-1 text-xs"
+        class="grid grid-flow-col gap-x-section gap-y-1 p-gutter text-xs"
         :style="{ gridTemplateRows: `repeat(${rowCount}, auto)` }"
       >
         <li
