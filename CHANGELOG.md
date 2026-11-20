@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/eatsomephp/qbit-slake/compare/v1.4.0...v1.4.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* tidy the which-key popup header ([c78ba06](https://github.com/eatsomephp/qbit-slake/commit/c78ba0644ad27af9546d9d8409ec3c4be585dd16))
+
 ## [1.4.0](https://github.com/eatsomephp/qbit-slake/compare/v1.3.0...v1.4.0) (2026-11-18)
 
 
