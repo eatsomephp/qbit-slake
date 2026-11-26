@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/eatsomephp/qbit-slake/compare/v1.4.1...v1.5.0) (2026-11-26)
+
+
+### Features
+
+* keep speed graph history across reloads and zoom it to fit ([868234f](https://github.com/eatsomephp/qbit-slake/commit/868234fc2fa3dc8b891dbd1bcbfc4a78c027210f))
+
+
+### Bug Fixes
+
+* match PWA window chrome to the active theme background ([f199269](https://github.com/eatsomephp/qbit-slake/commit/f1992697715445796c8fe62d87aa4145b031299c))
+
 ## [1.4.1](https://github.com/eatsomephp/qbit-slake/compare/v1.4.0...v1.4.1) (2026-11-20)
 
 
