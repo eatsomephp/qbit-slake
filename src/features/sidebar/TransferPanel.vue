@@ -4,12 +4,7 @@ import { computed, ref } from 'vue';
 import { ArrowDown, ArrowUp, Snail } from '@lucide/vue';
 import { useTorrentsStore } from '@/stores/torrents';
 import { useTransferStore } from '@/stores/transfer';
-import {
-  formatBytes,
-  formatDuration,
-  formatSpeedValue,
-  splitSpeedValueAndUnit,
-} from '@/lib/format';
+import { formatBytes, formatSpeedValue, splitSpeedValueAndUnit } from '@/lib/format';
 import TransferGraph from './TransferGraph.vue';
 import { epochMsAtFraction, interpolatedSampleAt, timeDomainOf } from './transferGraph';
 
@@ -25,11 +20,6 @@ const inspectedSample = computed(() =>
         epochMsAtFraction(timeDomainOf(transfer.samples), inspectedFraction.value),
       ),
 );
-const inspectedSecondsAgo = computed(() => {
-  const newest = transfer.samples.at(-1);
-  if (!inspectedSample.value || !newest) return 0;
-  return Math.round((newest.atEpochMs - inspectedSample.value.atEpochMs) / 1000);
-});
 
 function inspectAt(event: PointerEvent) {
   const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
@@ -86,11 +76,7 @@ const isEitherDirectionCapped = computed(() => directions.value.some(({ limit })
           <span class="shrink-0 text-2xs text-muted-foreground">{{ direction.rate.unit }}</span>
         </div>
         <div class="pl-5 font-mono text-2xs leading-5 text-muted-foreground tabular-nums">
-          <div v-if="inspectedSample" class="truncate">
-            {{ inspectedSecondsAgo ? `${formatDuration(inspectedSecondsAgo)} ago` : 'now' }}
-          </div>
           <div
-            v-else
             v-tooltip="
               `This session: ${formatBytes(direction.sessionTotal)}\nAll time: ${formatBytes(direction.allTimeTotal)}`
             "

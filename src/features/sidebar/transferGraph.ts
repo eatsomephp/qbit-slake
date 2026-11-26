@@ -4,6 +4,7 @@ const MIN_Y_SCALE_BYTES_PER_SEC = 16 * 1024;
 const HEADROOM_ABOVE_PEAK = 1.15;
 const TOP_INSET_PX = 4;
 const BASELINE_INSET_PX = 1;
+const MIN_TIME_WINDOW_MS = 30_000;
 
 export interface Point {
   x: number;
@@ -27,8 +28,17 @@ export interface GraphGeometry {
 
 export function timeDomainOf(samples: readonly TransferSample[]): TimeDomain {
   const endEpochMs = samples.at(-1)?.atEpochMs ?? 0;
-  const oldestEpochMs = samples[0]?.atEpochMs ?? endEpochMs;
-  return { startEpochMs: Math.max(oldestEpochMs, endEpochMs - GRAPH_HISTORY_MS), endEpochMs };
+  const recordedSpanMs = endEpochMs - (samples[0]?.atEpochMs ?? endEpochMs);
+  const windowMs = Math.min(GRAPH_HISTORY_MS, Math.max(MIN_TIME_WINDOW_MS, recordedSpanMs));
+  return { startEpochMs: endEpochMs - windowMs, endEpochMs };
+}
+
+export function spokenTimeWindowOf(samples: readonly TransferSample[]): string {
+  const { startEpochMs, endEpochMs } = timeDomainOf(samples);
+  const seconds = Math.round((endEpochMs - startEpochMs) / 1000);
+  if (seconds < 60) return `${seconds} seconds`;
+  const minutes = Math.round(seconds / 60);
+  return minutes === 1 ? 'minute' : `${minutes} minutes`;
 }
 
 export function epochMsAtFraction(domain: TimeDomain, fraction: number): number {
@@ -43,7 +53,8 @@ export function interpolatedSampleAt(
   if (!samples.length) return null;
   const first = samples[0]!;
   const last = samples.at(-1)!;
-  if (atEpochMs <= first.atEpochMs) return first;
+  if (atEpochMs < first.atEpochMs) return null;
+  if (atEpochMs === first.atEpochMs) return first;
   if (atEpochMs >= last.atEpochMs) return last;
   const laterIndex = samples.findIndex((sample) => sample.atEpochMs >= atEpochMs);
   const later = samples[laterIndex]!;
@@ -85,6 +96,24 @@ export function monotoneCurvePath(points: readonly Point[]): string {
   return path;
 }
 
+export function withZeroLeadIn(
+  samples: readonly TransferSample[],
+  domain: TimeDomain,
+): readonly TransferSample[] {
+  const [first, second] = samples;
+  if (!first || !second || first.atEpochMs <= domain.startEpochMs) return samples;
+  const rampStartEpochMs = Math.max(
+    domain.startEpochMs,
+    first.atEpochMs - (second.atEpochMs - first.atEpochMs),
+  );
+  const zeroAt = (atEpochMs: number): TransferSample => ({ atEpochMs, download: 0, upload: 0 });
+  const leadIn =
+    rampStartEpochMs > domain.startEpochMs
+      ? [zeroAt(domain.startEpochMs), zeroAt(rampStartEpochMs)]
+      : [zeroAt(domain.startEpochMs)];
+  return [...leadIn, ...samples];
+}
+
 export function buildGraphGeometry(
   samples: readonly TransferSample[],
   widthPx: number,
@@ -104,16 +133,20 @@ export function buildGraphGeometry(
   const plotHeight = baselineY - TOP_INSET_PX;
 
   const xOfEpochMs = (atEpochMs: number) =>
-    domainSpanMs > 0 ? ((atEpochMs - domain.startEpochMs) / domainSpanMs) * widthPx : widthPx;
+    ((atEpochMs - domain.startEpochMs) / domainSpanMs) * widthPx;
   const yOfRate = (bytesPerSec: number) =>
     baselineY - (bytesPerSec / yScaleMaxBytesPerSec) * plotHeight;
 
   function pathsFor(rateOf: (sample: TransferSample) => number) {
     if (samples.length < 2) return { line: '', area: '' };
+    const drawnSamples = withZeroLeadIn(samples, domain);
     const line = monotoneCurvePath(
-      samples.map((sample) => ({ x: xOfEpochMs(sample.atEpochMs), y: yOfRate(rateOf(sample)) })),
+      drawnSamples.map((sample) => ({
+        x: xOfEpochMs(sample.atEpochMs),
+        y: yOfRate(rateOf(sample)),
+      })),
     );
-    const firstX = xOfEpochMs(samples[0]!.atEpochMs).toFixed(1);
+    const firstX = xOfEpochMs(drawnSamples[0]!.atEpochMs).toFixed(1);
     const lastX = xOfEpochMs(samples.at(-1)!.atEpochMs).toFixed(1);
     return { line, area: `${line}L${lastX},${heightPx}L${firstX},${heightPx}Z` };
   }

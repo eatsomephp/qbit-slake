@@ -5,7 +5,9 @@ import {
   epochMsAtFraction,
   interpolatedSampleAt,
   monotoneCurvePath,
+  spokenTimeWindowOf,
   timeDomainOf,
+  withZeroLeadIn,
 } from './transferGraph';
 
 const NOW = 1_000_000;
@@ -38,11 +40,17 @@ describe('buildGraphGeometry', () => {
     expect(geometry.yScaleMaxBytesPerSec).toBeCloseTo(peak * 1.15);
   });
 
-  it('stretches a short history across the full width', () => {
-    const geometry = buildGraphGeometry([sample(30_000, 1), sample(0, 1)], 300, 50);
-    expect(geometry.xOfEpochMs(NOW - 30_000)).toBe(0);
-    expect(geometry.xOfEpochMs(NOW - 15_000)).toBe(150);
+  it('zooms in so a growing history spans the full width', () => {
+    const geometry = buildGraphGeometry([sample(120_000, 1), sample(0, 1)], 300, 50);
+    expect(geometry.xOfEpochMs(NOW - 120_000)).toBe(0);
+    expect(geometry.xOfEpochMs(NOW - 60_000)).toBe(150);
     expect(geometry.xOfEpochMs(NOW)).toBe(300);
+  });
+
+  it('keeps at least 30 seconds in view while the first samples arrive', () => {
+    const geometry = buildGraphGeometry([sample(2000, 1), sample(0, 1)], 300, 50);
+    expect(geometry.xOfEpochMs(NOW - 30_000)).toBe(0);
+    expect(geometry.xOfEpochMs(NOW - 2000)).toBe(280);
   });
 
   it('maps zero just above the bottom edge and the scale maximum to the top inset', () => {
@@ -55,20 +63,60 @@ describe('buildGraphGeometry', () => {
     const geometry = buildGraphGeometry([sample(GRAPH_HISTORY_MS, 0, 0), sample(0, 0, 0)], 100, 50);
     expect(geometry.downloadArea).toBe(`${geometry.downloadLine}L100.0,50L0.0,50Z`);
   });
+
+  it('fills a history shorter than 30 seconds out to the full width from a zero baseline', () => {
+    const geometry = buildGraphGeometry([sample(10_000, 10_000), sample(0)], 100, 50);
+    expect(geometry.downloadArea).toMatch(new RegExp(`^M0\\.0,${geometry.yOfRate(0).toFixed(1)}`));
+    expect(geometry.downloadArea).toMatch(/L100\.0,50L0\.0,50Z$/);
+  });
+});
+
+describe('withZeroLeadIn', () => {
+  const domain = { startEpochMs: NOW - GRAPH_HISTORY_MS, endEpochMs: NOW };
+
+  it('holds zero from the window start until one poll interval before the first sample', () => {
+    const samples = [sample(60_000, 5, 6), sample(58_000, 7, 8)];
+    expect(withZeroLeadIn(samples, domain)).toEqual([
+      sample(GRAPH_HISTORY_MS),
+      sample(62_000),
+      ...samples,
+    ]);
+  });
+
+  it('ramps straight from the window start when the gap is shorter than a poll interval', () => {
+    const samples = [sample(GRAPH_HISTORY_MS - 1000, 5), sample(GRAPH_HISTORY_MS - 3000, 5)];
+    expect(withZeroLeadIn(samples, domain)).toEqual([sample(GRAPH_HISTORY_MS), ...samples]);
+  });
+
+  it('leaves a history that already fills the window alone', () => {
+    const samples = [sample(GRAPH_HISTORY_MS, 5), sample(0, 5)];
+    expect(withZeroLeadIn(samples, domain)).toBe(samples);
+  });
 });
 
 describe('timeDomainOf', () => {
-  it('spans from the oldest sample to the newest', () => {
-    expect(timeDomainOf([sample(20_000), sample(0)])).toEqual({
-      startEpochMs: NOW - 20_000,
-      endEpochMs: NOW,
-    });
+  it.each([
+    ['spans the recorded history', [sample(90_000), sample(0)], 90_000],
+    ['never spans less than 30 seconds', [sample(2000), sample(0)], 30_000],
+    [
+      'never spans more than the history window',
+      [sample(GRAPH_HISTORY_MS * 2), sample(0)],
+      GRAPH_HISTORY_MS,
+    ],
+  ])('%s', (_, samples, expectedSpanMs) => {
+    expect(timeDomainOf(samples)).toEqual({ startEpochMs: NOW - expectedSpanMs, endEpochMs: NOW });
   });
+});
 
-  it('never spans more than the history window', () => {
-    expect(timeDomainOf([sample(GRAPH_HISTORY_MS * 2), sample(0)]).startEpochMs).toBe(
-      NOW - GRAPH_HISTORY_MS,
-    );
+describe('spokenTimeWindowOf', () => {
+  it.each([
+    [[sample(2000), sample(0)], '30 seconds'],
+    [[sample(45_000), sample(0)], '45 seconds'],
+    [[sample(80_000), sample(0)], 'minute'],
+    [[sample(150_000), sample(0)], '3 minutes'],
+    [[sample(GRAPH_HISTORY_MS * 2), sample(0)], '5 minutes'],
+  ])('describes the visible window in words', (samples, expected) => {
+    expect(spokenTimeWindowOf(samples)).toBe(expected);
   });
 });
 
@@ -95,8 +143,12 @@ describe('interpolatedSampleAt', () => {
     });
   });
 
-  it('clamps to the oldest and newest samples', () => {
-    expect(interpolatedSampleAt(samples, NOW - 9999)).toBe(samples[0]);
+  it('has nothing to show before the oldest sample', () => {
+    expect(interpolatedSampleAt(samples, NOW - 9999)).toBeNull();
+  });
+
+  it('returns the edge samples at and beyond the ends of the history', () => {
+    expect(interpolatedSampleAt(samples, NOW - 2000)).toBe(samples[0]);
     expect(interpolatedSampleAt(samples, NOW + 9999)).toBe(samples[2]);
   });
 

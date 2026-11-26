@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, useId, useTemplateRef } from 'vue';
 import { useElementSize } from '@vueuse/core';
+import { formatDuration } from '@/lib/format';
 import type { TransferSample } from '@/stores/transfer';
-import { buildGraphGeometry } from './transferGraph';
+import { buildGraphGeometry, spokenTimeWindowOf } from './transferGraph';
 
 const props = defineProps<{
   samples: readonly TransferSample[];
@@ -39,6 +40,18 @@ const series = computed(() => [
     fillClass: 'fill-chart-download',
   },
 ]);
+const ariaLabel = computed(
+  () => `Download and upload speed over the last ${spokenTimeWindowOf(props.samples)}`,
+);
+const inspectedX = computed(() =>
+  props.inspected ? geometry.value.xOfEpochMs(props.inspected.atEpochMs) : 0,
+);
+const inspectedTimeLabel = computed(() => {
+  const newest = props.samples.at(-1);
+  if (!props.inspected || !newest) return '';
+  const secondsAgo = Math.round((newest.atEpochMs - props.inspected.atEpochMs) / 1000);
+  return secondsAgo ? `${formatDuration(secondsAgo)} ago` : 'now';
+});
 const isCollectingSamples = computed(() => props.samples.length < 2);
 const visibleLimits = computed(() =>
   series.value.filter(
@@ -65,7 +78,7 @@ const visibleLimits = computed(() =>
       :height="heightPx"
       class="block"
       role="img"
-      aria-label="Download and upload speed over the last five minutes"
+      :aria-label="ariaLabel"
     >
       <defs>
         <linearGradient
@@ -111,8 +124,8 @@ const visibleLimits = computed(() =>
       />
       <g v-if="inspected">
         <line
-          :x1="geometry.xOfEpochMs(inspected.atEpochMs)"
-          :x2="geometry.xOfEpochMs(inspected.atEpochMs)"
+          :x1="inspectedX"
+          :x2="inspectedX"
           y1="0"
           :y2="heightPx"
           class="stroke-muted-foreground/40"
@@ -121,7 +134,7 @@ const visibleLimits = computed(() =>
         <circle
           v-for="entry in series"
           :key="`${entry.name}-marker`"
-          :cx="geometry.xOfEpochMs(inspected.atEpochMs)"
+          :cx="inspectedX"
           :cy="geometry.yOfRate(entry.rateOf(inspected))"
           r="4"
           class="stroke-sidebar"
@@ -130,6 +143,17 @@ const visibleLimits = computed(() =>
         />
       </g>
     </svg>
+    <div
+      v-if="inspected"
+      class="pointer-events-none absolute top-0 rounded bg-sidebar/80 px-1 font-mono text-2xs leading-4 whitespace-nowrap text-muted-foreground tabular-nums"
+      :style="
+        inspectedX > width / 2
+          ? { right: `${width - inspectedX + 4}px` }
+          : { left: `${inspectedX + 4}px` }
+      "
+    >
+      {{ inspectedTimeLabel }}
+    </div>
   </div>
 </template>
 

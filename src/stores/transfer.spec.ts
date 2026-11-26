@@ -1,9 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { useTorrentsStore } from './torrents';
-import { GRAPH_HISTORY_MS, useTransferStore } from './transfer';
+import { GRAPH_HISTORY_MS, TRANSFER_SAMPLES_STORAGE_KEY, useTransferStore } from './transfer';
 
-beforeEach(() => setActivePinia(createPinia()));
+beforeEach(() => {
+  sessionStorage.clear();
+  setActivePinia(createPinia());
+});
 
 describe('transfer store', () => {
   it('records samples in order', () => {
@@ -51,5 +54,41 @@ describe('transfer store', () => {
     expect(transfer.samples[0]).toMatchObject({ download: 111, upload: 222 });
     torrents.reset();
     expect(transfer.samples).toEqual([]);
+  });
+
+  describe('across page reloads', () => {
+    it('restores recorded samples', () => {
+      const now = Date.now();
+      useTransferStore().record(1, 2, now - 1000);
+      setActivePinia(createPinia());
+      expect(useTransferStore().samples).toEqual([
+        { atEpochMs: now - 1000, download: 1, upload: 2 },
+      ]);
+    });
+
+    it('drops restored samples that have aged out of the history window', () => {
+      const now = Date.now();
+      const transfer = useTransferStore();
+      transfer.record(1, 1, now - GRAPH_HISTORY_MS - 1000);
+      transfer.record(2, 2, now - 1000);
+      setActivePinia(createPinia());
+      expect(useTransferStore().samples.map((s) => s.download)).toEqual([2]);
+    });
+
+    it.each(['not json', '{"atEpochMs":1}', '[{"atEpochMs":1,"download":"fast","upload":0}]'])(
+      'starts empty when the stored history is unusable: %s',
+      (stored) => {
+        sessionStorage.setItem(TRANSFER_SAMPLES_STORAGE_KEY, stored);
+        expect(useTransferStore().samples).toEqual([]);
+      },
+    );
+
+    it('forgets the stored history on clear', () => {
+      const transfer = useTransferStore();
+      transfer.record(1, 1);
+      transfer.clear();
+      setActivePinia(createPinia());
+      expect(useTransferStore().samples).toEqual([]);
+    });
   });
 });
