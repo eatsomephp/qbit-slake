@@ -36,6 +36,30 @@ function loadCustomThemeStylesheet() {
   document.head.append(customThemeLink);
 }
 
+let colorCanvas: CanvasRenderingContext2D | null | undefined;
+
+/** Window chrome ignores theme-color values it can't parse (oklch, color-mix), so resolve to hex. */
+function toHexColor(cssColor: string): string {
+  colorCanvas ??= document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  if (!colorCanvas) return cssColor;
+  colorCanvas.clearRect(0, 0, 1, 1);
+  colorCanvas.fillStyle = cssColor;
+  colorCanvas.fillRect(0, 0, 1, 1);
+  const [red, green, blue] = colorCanvas.getImageData(0, 0, 1, 1).data;
+  return `#${[red, green, blue].map((channel) => channel!.toString(16).padStart(2, '0')).join('')}`;
+}
+
+/** index.html ships per-color-scheme fallbacks; once the theme is known, one unconditional tag wins. */
+function setWindowChromeColor(color: string) {
+  const [themeColorMeta, ...staticFallbacks] = document.querySelectorAll<HTMLMetaElement>(
+    'meta[name="theme-color"]',
+  );
+  if (!themeColorMeta) return;
+  for (const fallback of staticFallbacks) fallback.remove();
+  themeColorMeta.removeAttribute('media');
+  themeColorMeta.content = color;
+}
+
 function applyTheme(colorScheme: ColorScheme, themePreference: unknown, systemDark: boolean) {
   const root = document.documentElement;
   const theme = resolveTheme(themePreference, customThemeAvailable.value);
@@ -43,8 +67,7 @@ function applyTheme(colorScheme: ColorScheme, themePreference: unknown, systemDa
   root.dataset.theme = theme;
   if (customThemeLink) customThemeLink.media = theme === 'custom' ? 'all' : 'not all';
   const background = getComputedStyle(root).getPropertyValue('--background').trim();
-  if (background)
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', background);
+  if (background) setWindowChromeColor(toHexColor(background));
 }
 
 /**
